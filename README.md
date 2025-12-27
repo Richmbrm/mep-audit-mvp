@@ -1,2 +1,2 @@
-MEP Audit App 
+MEP Audit App - MVP
 Built using Antigravity
