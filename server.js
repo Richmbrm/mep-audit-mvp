@@ -15,6 +15,12 @@ const PROJECT_ROOT = path.join(__dirname, '..');
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the Vite build directory
+const DIST_PATH = path.join(__dirname, 'dist');
+if (fs.existsSync(DIST_PATH)) {
+    app.use(express.static(DIST_PATH));
+}
+
 // Endpoint to list CSV/ODS files
 app.get('/api/files', (req, res) => {
     console.log(`Scanning for files in: ${PROJECT_ROOT}`);

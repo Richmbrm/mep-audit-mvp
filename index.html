@@ -13,9 +13,12 @@
 
 <body>
   <div id="app">
-    <header>
-      <h1>MEP Audit Viewer</h1>
-      <p style="color: var(--color-text-dim)">Upload your JSON audit logs to visualize compliance reports.</p>
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+      <div style="text-align: left;">
+        <h1>MEP Audit Viewer</h1>
+        <p style="color: var(--color-text-dim)">Upload your JSON audit logs to visualize compliance reports.</p>
+      </div>
+      <button id="resetBtn" class="secondary-btn">🔄 Reset Interface</button>
     </header>
 
     <div id="dropzone" class="upload-container">

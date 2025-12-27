@@ -33,8 +33,28 @@ const lastUpdated = document.getElementById('lastUpdated');
 const jobRefInput = document.getElementById('jobRefInput');
 const runBtn = document.getElementById('runBtn');
 const runStatus = document.getElementById('runStatus');
+const resetBtn = document.getElementById('resetBtn');
 
-const API_BASE = `http://${window.location.hostname}:3001/api`;
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? `http://${window.location.hostname}:3001/api`
+  : '/api';
+
+// Reset Functionality
+resetBtn.addEventListener('click', () => {
+  // Hide sections
+  dashboard.classList.add('hidden');
+  aiExpert.classList.add('hidden');
+  searchResults.classList.add('hidden');
+
+  // Clear inputs
+  jobRefInput.value = '';
+  standardsSearch.value = '';
+  fileInput.value = '';
+
+  // Smooth scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  console.log('Interface reset to initial state');
+});
 
 // Fetch available reference files on load
 async function fetchFiles() {
