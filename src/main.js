@@ -221,16 +221,15 @@ function handleFiles(files) {
 }
 
 function showInsight(type) {
-  const insight = STANDARDS_DB.Failure_Modes[type];
+  const insight = STANDARDS_DB.FAILURE_ANALYSIS_MODES[type];
   if (!insight) return;
 
   aiExpert.classList.remove('hidden');
   aiExpertContent.innerHTML = `
-    <div class="insight-card">
-      <span class="insight-tag">Issue: ${type.replace(/_/g, ' ')}</span>
-      <p><strong>Expert Explanation:</strong> ${insight.Explanation}</p>
-      <p style="color: var(--color-text-dim); font-size: 0.875rem;"><strong>Reg Ref:</strong> ${insight.Regulatory_Ref}</p>
-      <p style="color: var(--color-success); font-size: 0.875rem; margin-top: 1rem;"><strong>Recommended Action:</strong> ${insight.Action}</p>
+    <div class="insight-card animate-in" style="border-left: 4px solid #ef4444;">
+      <span class="insight-tag">Compliance Insight: ${type.replace(/_/g, ' ')}</span>
+      <p><strong>Engineering Analysis:</strong> ${insight.Cause}</p>
+      <p style="color: var(--color-success); font-size: 0.875rem; margin-top: 1rem;"><strong>Expert Recommendation:</strong> ${insight.Action}</p>
     </div>
   `;
   aiExpert.scrollIntoView({ behavior: 'smooth' });
@@ -258,7 +257,7 @@ function renderDashboard(data, fileName) {
       <td>${room.comfort}</td>
       <td><span class="status-badge ${isPass ? 'status-pass' : 'status-fail'}">${room.status}</span></td>
       <td>
-        ${!isPass ? `<button class="expert-btn" onclick="window.showAIInsight('Low_ACH')">Ask AI Expert</button>` : ''}
+        ${!isPass ? `<button class="expert-btn" onclick="window.showAIInsight('ACH_Variance')">Ask AI Expert</button>` : ''}
       </td>
     `;
     roomTableBody.appendChild(row);
