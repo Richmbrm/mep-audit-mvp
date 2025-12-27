@@ -10,29 +10,18 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const PROJECT_ROOT = path.join(__dirname, '..');
+const PROJECT_ROOT = __dirname;
 
 app.use(cors());
 app.use(express.json());
 
 // Endpoint to list CSV/ODS files
 app.get('/api/files', (req, res) => {
-    console.log(`--- FILE SCAN START ---`);
-    console.log(`Current __dirname: ${__dirname}`);
-    console.log(`Resolved PROJECT_ROOT: ${PROJECT_ROOT}`);
-
-    if (!fs.existsSync(PROJECT_ROOT)) {
-        console.error(`PROJECT_ROOT does not exist!`);
-        return res.status(500).json({ error: 'Project root not found', path: PROJECT_ROOT });
-    }
-
     fs.readdir(PROJECT_ROOT, (err, files) => {
         if (err) {
             console.error('Directory read error:', err);
             return res.status(500).json({ error: 'Cannot read directory', details: err.message });
         }
-
-        console.log(`All files found in root: ${files}`);
 
         const mepFiles = files.filter(f => {
             const lowerF = f.toLowerCase();

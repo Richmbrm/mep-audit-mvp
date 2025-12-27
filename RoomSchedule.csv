@@ -1,0 +1,5 @@
+name,class,area,height,supply_airflow_m3h,temp,humidity
+Tissue Culture Lab 01,ISO_7,25,3,3200,21,50
+General Prep Area,ISO_8,40,3,900,22,45
+Storage Room,ISO_8,15,3,150,22,40
+Analytical Lab,ISO_7,30,3,4000,21,50

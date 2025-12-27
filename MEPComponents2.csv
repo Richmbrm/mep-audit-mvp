@@ -1,0 +1,6 @@
+Mark,Category,Description,Manufacturer,Model Number,Service,Flow Rate (GPM),Static Pressure (in wg),Power (V/PH/Hz),Location
+P-01,Pump,End Suction Pump,Bell & Gossett,e-1510,Heating Water,150,65,460/3/60,Mechanical Room 101
+EF-01,Fan,Centrifugal Roof Exhaust,Greenheck,GB-180,Restroom Exhaust,850,0.5,120/1/60,Roof
+CH-01,Chiller,Air-Cooled Scroll Chiller,Trane,CGAM,Chilled Water,240,-,460/3/60,Exterior Yard
+VAV-1-01,Terminal Unit,VAV Box w/ Reheat,Price,SDV,Supply Air,450,0.25,277/1/60,Level 1 Plenum
+CU-01,Condensing Unit,Split System CU,Carrier,38AUZ,DX Cooling,1200,1.2,208/3/60,Roof
