@@ -145,48 +145,49 @@ function displayFocusedInsight(res) {
   `;
   aiExpert.classList.remove('hidden');
 }
-if (!query) {
-  searchResults.classList.add('hidden');
-  return;
-}
+function performSearch(query) {
+  if (!query) {
+    searchResults.classList.add('hidden');
+    return;
+  }
 
-const results = [];
-// Basic recursive search through standards DB
-function search(obj, path = '') {
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'object') {
-      search(value, `${path} > ${key}`);
-    } else if (value.toLowerCase().includes(query) || key.toLowerCase().includes(query)) {
-      results.push({ key, value, path });
+  const results = [];
+  // Basic recursive search through standards DB
+  function search(obj, path = '') {
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === 'object') {
+        search(value, `${path} > ${key}`);
+      } else if (value.toLowerCase().includes(query) || key.toLowerCase().includes(query)) {
+        results.push({ key, value, path });
+      }
     }
   }
-}
-search(STANDARDS_DB);
+  search(STANDARDS_DB);
 
-if (results.length > 0) {
-  searchResults.innerHTML = results.slice(0, 5).map((res, index) => `
+  if (results.length > 0) {
+    searchResults.innerHTML = results.slice(0, 5).map((res, index) => `
       <div class="result-item" data-index="${index}" style="cursor: pointer;">
         <span class="insight-tag">${res.path}</span>
         <p style="margin: 0.25rem 0">${res.value}</p>
       </div>
     `).join('');
 
-  // Add click listeners to each result
-  const items = searchResults.querySelectorAll('.result-item');
-  items.forEach(item => {
-    item.addEventListener('click', () => {
-      const idx = item.getAttribute('data-index');
-      const selected = results[idx];
-      displayFocusedInsight(selected);
-      searchResults.classList.add('hidden');
+    // Add click listeners to each result
+    const items = searchResults.querySelectorAll('.result-item');
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        const idx = item.getAttribute('data-index');
+        const selected = results[idx];
+        displayFocusedInsight(selected);
+        searchResults.classList.add('hidden');
+      });
     });
-  });
 
-  searchResults.classList.remove('hidden');
-} else {
-  searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
-  searchResults.classList.remove('hidden');
-}
+    searchResults.classList.remove('hidden');
+  } else {
+    searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
+    searchResults.classList.remove('hidden');
+  }
 }
 
 standardsSearch.addEventListener('input', (e) => {
