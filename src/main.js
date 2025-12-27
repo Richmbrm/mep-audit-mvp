@@ -24,6 +24,7 @@ const equipTableBody = document.querySelector('#equipTable tbody');
 const aiExpert = document.getElementById('aiExpert');
 const aiExpertContent = document.getElementById('aiExpertContent');
 const standardsSearch = document.getElementById('standardsSearch');
+const searchBtn = document.getElementById('searchBtn');
 const searchResults = document.getElementById('searchResults');
 
 // Backend Integration
@@ -132,8 +133,7 @@ fileInput.addEventListener('change', (e) => {
   if (e.target.files.length > 0) handleFiles(e.target.files);
 });
 
-standardsSearch.addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase();
+function performSearch(query) {
   if (!query) {
     searchResults.classList.add('hidden');
     return;
@@ -163,6 +163,20 @@ standardsSearch.addEventListener('input', (e) => {
   } else {
     searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
     searchResults.classList.remove('hidden');
+  }
+}
+
+standardsSearch.addEventListener('input', (e) => {
+  performSearch(e.target.value.toLowerCase());
+});
+
+searchBtn.addEventListener('click', () => {
+  performSearch(standardsSearch.value.toLowerCase());
+});
+
+standardsSearch.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    performSearch(standardsSearch.value.toLowerCase());
   }
 });
 

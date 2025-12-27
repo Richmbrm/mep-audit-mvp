@@ -414,14 +414,17 @@ tr:hover td {
 
 .search-box {
   position: relative;
+  display: flex;
+  gap: 0.75rem;
+  align-items: stretch;
 }
 
 .search-box input {
-  width: 100%;
+  flex: 1;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   color: #fff;
   font-size: 1rem;
   box-sizing: border-box;
@@ -431,6 +434,25 @@ tr:hover td {
   outline: none;
   border-color: var(--color-primary);
   background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.search-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
 }
 
 .search-results {
