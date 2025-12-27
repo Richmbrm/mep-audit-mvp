@@ -356,10 +356,10 @@ tr:hover td {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
   border: 1px solid var(--color-primary);
   border-radius: 1.5rem;
-  padding: 2rem;
+  padding: 2.5rem;
   margin: 3rem 0;
   position: relative;
-  overflow: hidden;
+  /* Removed overflow: hidden to allow search results to be visible */
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
 }
 
@@ -421,13 +421,15 @@ tr:hover td {
 
 .search-box input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  padding: 1.25rem 1.5rem;
+  padding: 2.5rem 2rem;
+  /* Doubled height for better visibility */
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.25rem;
   box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
 .search-box input:focus {
