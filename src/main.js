@@ -133,37 +133,60 @@ fileInput.addEventListener('change', (e) => {
   if (e.target.files.length > 0) handleFiles(e.target.files);
 });
 
-function performSearch(query) {
-  if (!query) {
-    searchResults.classList.add('hidden');
-    return;
-  }
+function displayFocusedInsight(res) {
+  aiExpertContent.innerHTML = `
+    <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary);">
+      <span class="insight-tag">${res.path}</span>
+      <p style="font-size: 1.125rem; line-height: 1.6; margin: 0.5rem 0;">${res.value}</p>
+      <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-dim);">
+        💡 Selected from Standards Database
+      </div>
+    </div>
+  `;
+  aiExpert.classList.remove('hidden');
+}
+if (!query) {
+  searchResults.classList.add('hidden');
+  return;
+}
 
-  const results = [];
-  // Basic recursive search through standards DB
-  function search(obj, path = '') {
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'object') {
-        search(value, `${path} > ${key}`);
-      } else if (value.toLowerCase().includes(query) || key.toLowerCase().includes(query)) {
-        results.push({ key, value, path });
-      }
+const results = [];
+// Basic recursive search through standards DB
+function search(obj, path = '') {
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'object') {
+      search(value, `${path} > ${key}`);
+    } else if (value.toLowerCase().includes(query) || key.toLowerCase().includes(query)) {
+      results.push({ key, value, path });
     }
   }
-  search(STANDARDS_DB);
+}
+search(STANDARDS_DB);
 
-  if (results.length > 0) {
-    searchResults.innerHTML = results.slice(0, 5).map(res => `
-      <div class="result-item">
+if (results.length > 0) {
+  searchResults.innerHTML = results.slice(0, 5).map((res, index) => `
+      <div class="result-item" data-index="${index}" style="cursor: pointer;">
         <span class="insight-tag">${res.path}</span>
         <p style="margin: 0.25rem 0">${res.value}</p>
       </div>
     `).join('');
-    searchResults.classList.remove('hidden');
-  } else {
-    searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
-    searchResults.classList.remove('hidden');
-  }
+
+  // Add click listeners to each result
+  const items = searchResults.querySelectorAll('.result-item');
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = item.getAttribute('data-index');
+      const selected = results[idx];
+      displayFocusedInsight(selected);
+      searchResults.classList.add('hidden');
+    });
+  });
+
+  searchResults.classList.remove('hidden');
+} else {
+  searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
+  searchResults.classList.remove('hidden');
+}
 }
 
 standardsSearch.addEventListener('input', (e) => {
