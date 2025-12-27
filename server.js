@@ -73,6 +73,19 @@ app.post('/api/run-audit', (req, res) => {
     });
 });
 
+// 2. STATIC FILES & CATCH-ALL (AFTER API)
+const DIST_PATH = path.join(__dirname, 'dist');
+app.use(express.static(DIST_PATH));
+
+app.get('*', (req, res) => {
+    const indexPath = path.join(DIST_PATH, 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(404).send('MEP Audit System is initializing. Please wait and refresh in 10 seconds.');
+    }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`MEP Backend running at http://0.0.0.0:${PORT}`);
 });
