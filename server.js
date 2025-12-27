@@ -77,7 +77,8 @@ app.post('/api/run-audit', (req, res) => {
 const DIST_PATH = path.join(__dirname, 'dist');
 app.use(express.static(DIST_PATH));
 
-app.get('(.*)', (req, res) => {
+// Use a regular expression literal for the catch-all to satisfy Express 5 / path-to-regexp
+app.get(/.*/, (req, res) => {
     const indexPath = path.join(DIST_PATH, 'index.html');
     if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);
