@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MEP Audit Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h1>MEP Audit Viewer</h1>
+      <p style="color: var(--color-text-dim)">Upload your JSON audit logs to visualize compliance reports.</p>
+    </header>
+
+    <div id="dropzone" class="upload-container">
+      <span class="upload-icon">📁</span>
+      <p><strong>Click to upload</strong> or drag and drop</p>
+      <p style="font-size: 0.875rem; color: var(--color-text-dim)">Select .json files from your audit runs</p>
+      <input type="file" id="fileInput" class="hidden" multiple accept=".json" />
+    </div>
+
+    <div class="divider"><span>OR</span></div>
+
+    <section class="run-audit-section">
+      <div class="card">
+        <span class="card-title">Run New Audit</span>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fileSelect" style="display: flex; justify-content: space-between;">
+              Select Source File
+              <span id="refreshFiles" style="cursor: pointer; font-size: 0.8rem; color: var(--color-primary);">🔄
+                Refresh</span>
+              <span id="lastUpdated"
+                style="font-size: 0.7rem; color: var(--color-text-dim); margin-left: 0.5rem;"></span>
+            </label>
+            <select id="fileSelect">
+              <option value="">Loading files...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="jobRefInput">Job Reference</label>
+            <input type="text" id="jobRefInput" placeholder="e.g. CITY-AUDIT-2025" />
+          </div>
+          <button id="runBtn" class="primary-btn">🚀 Run Audit Now</button>
+        </div>
+        <div id="runStatus" class="hidden" style="margin-top: 1rem; color: var(--color-primary); font-size: 0.875rem;">
+          ⚙️ Processing Audit... please wait...
+        </div>
+      </div>
+    </section>
+
+    <div id="dashboard" class="hidden animate-in">
+      <div class="dashboard-grid">
+        <div class="card">
+          <span class="card-title">Audit Overview</span>
+          <div id="runDate" class="card-value">-</div>
+          <div id="jobRef" style="color: var(--color-primary); font-weight: 600; margin-top: 0.5rem;">Job: -</div>
+          <p id="fileName" style="color: var(--color-text-dim); font-size: 0.875rem; margin-top: 0.5rem;"></p>
+        </div>
+
+        <div class="card">
+          <span class="card-title">Room Compliance</span>
+          <div id="roomMetric" class="card-value">-%</div>
+          <div class="status-grid">
+            <span id="roomPassCount" class="status-badge status-pass">0 PASSED</span>
+            <span id="roomFailCount" class="status-badge status-fail">0 FAILED</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="card-title">Equipment Status</span>
+          <div id="equipMetric" class="card-value">-%</div>
+          <div class="status-grid">
+            <span id="equipPassCount" class="status-badge status-pass">0 PASSED</span>
+            <span id="equipFailCount" class="status-badge status-fail">0 FAILED</span>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h2>Room Validation</h2>
+        <div class="table-wrapper">
+          <table id="roomTable">
+            <thead>
+              <tr>
+                <th>Room Name</th>
+                <th>ACH</th>
+                <th>Comfort</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- AI Expert Section -->
+      <section id="aiExpert" class="ai-expert-panel animate-in hidden">
+        <div class="ai-expert-header">
+          <span class="ai-icon">🤖</span>
+          <div>
+            <h3>AI Standards Insight</h3>
+            <p style="font-size: 0.75rem; color: var(--color-text-dim)">Context-aware compliance expert</p>
+          </div>
+        </div>
+        <div id="aiExpertContent" class="ai-expert-body">
+          <!-- Dynamic content goes here -->
+        </div>
+        <div class="search-box">
+          <input type="text" id="standardsSearch" placeholder="Ask about ISO 14644, ACH, Pressure..." />
+          <div id="searchResults" class="search-results hidden"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Equipment Schedule</h2>
+        <div class="table-wrapper">
+          <table id="equipTable">
+            <thead>
+              <tr>
+                <th>Mark</th>
+                <th>Category</th>
+                <th>Issues</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
