@@ -70,10 +70,10 @@
 
           <!-- Option 2: Upload New File -->
           <div class="audit-option">
-            <label class="option-label">Option 2: Upload Local File</label>
+            <label class="option-label">Option 2: Process Local File</label>
             <div class="form-group">
-              <label for="runFileInput">Choose CSV File</label>
-              <input type="file" id="runFileInput" accept=".csv" />
+              <label for="runFileInput">Choose .csv (To Run) or .json (To View)</label>
+              <input type="file" id="runFileInput" accept=".csv,.json" />
             </div>
           </div>
         </div>
@@ -155,9 +155,14 @@
         </div>
       </section>
 
-      <section>
+      <section id="equipSection">
         <h2>Equipment Schedule</h2>
-        <div class="table-wrapper">
+        <div id="equipNoData" class="hidden"
+          style="padding: 3rem; text-align: center; color: var(--color-text-dim); background: rgba(255,255,255,0.02); border-radius: 1rem; border: 1px dashed var(--color-border);">
+          <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📋</span>
+          No data at this time in Equipment Schedule section.
+        </div>
+        <div id="equipTableWrapper" class="table-wrapper">
           <table id="equipTable">
             <thead>
               <tr>

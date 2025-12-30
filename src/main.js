@@ -17,6 +17,9 @@ const equipFailCountEl = document.getElementById('equipFailCount');
 // Tables
 const roomTableBody = document.querySelector('#roomTable tbody');
 const equipTableBody = document.querySelector('#equipTable tbody');
+const equipSection = document.getElementById('equipSection');
+const equipTableWrapper = document.getElementById('equipTableWrapper');
+const equipNoData = document.getElementById('equipNoData');
 
 // AI Expert
 const aiExpert = document.getElementById('aiExpert');
@@ -105,6 +108,25 @@ runBtn.addEventListener('click', async () => {
   if (runFileInput.files.length > 0) {
     const file = runFileInput.files[0];
     fileName = file.name;
+
+    // Check if it's a JSON file (View Only)
+    if (fileName.toLowerCase().endsWith('.json')) {
+      fileContent = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsText(file);
+      });
+      try {
+        const data = JSON.parse(fileContent);
+        renderDashboard(data, fileName);
+        alert('Displaying local report');
+        return; // Shortcut for local JSON
+      } catch (e) {
+        return alert('Invalid JSON file format');
+      }
+    }
+
+    // Otherwise treat as CSV for Running
     fileContent = await new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (e) => resolve(e.target.result);
@@ -302,10 +324,31 @@ function showInsight(type) {
 }
 
 function renderDashboard(data, fileName) {
+  const isOption1 = !!fileSelect.value;
+
   dashboard.classList.remove('hidden');
   runDateEl.textContent = data.run_date || 'Unknown Date';
   jobRefEl.textContent = `Job: ${data.job_reference || 'Unreferenced'}`;
   fileNameEl.textContent = `File: ${data.input_file || fileName}`;
+
+  // Visibility Logic for Equipment Section
+  if (!isOption1) {
+    equipSection.classList.add('hidden');
+  } else {
+    equipSection.classList.remove('hidden');
+
+    // Check if data contains only "Invalid power format" errors
+    const allInvalid = data.equipment && data.equipment.length > 0 &&
+      data.equipment.every(e => e.status === 'FAIL' && e.issues.includes('Invalid power format'));
+
+    if (allInvalid) {
+      equipTableWrapper.classList.add('hidden');
+      equipNoData.classList.remove('hidden');
+    } else {
+      equipTableWrapper.classList.remove('hidden');
+      equipNoData.classList.add('hidden');
+    }
+  }
 
   // Rooms
   roomTableBody.innerHTML = '';
