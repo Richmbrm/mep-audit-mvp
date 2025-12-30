@@ -1,4 +1,5 @@
 import './history.css'
+import historyManifest from './history-manifest.json'
 
 const commitList = document.getElementById('commit-list');
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -7,13 +8,19 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 
 async function initHistory() {
     try {
-        // Fetch Git Log and Comments in parallel
-        const [historyRes, commentsRes] = await Promise.all([
-            fetch(`${API_BASE}/git-history`),
-            fetch(`${API_BASE}/comments`)
-        ]);
+        // Primary: Use Build-time Manifest (Bulletproof for Cloud)
+        let history = historyManifest || [];
 
-        const history = await historyRes.json();
+        // Secondary: Try to fetch live (for local dev updates without rebuild)
+        try {
+            const liveRes = await fetch(`${API_BASE}/git-history`);
+            if (liveRes.ok) {
+                const liveHistory = await liveRes.json();
+                if (liveHistory.length > history.length) history = liveHistory;
+            }
+        } catch (e) { console.warn('Live history fetch failed, falling back to manifest'); }
+
+        const commentsRes = await fetch(`${API_BASE}/comments`);
         const comments = await commentsRes.json();
 
         renderHistory(history, comments);

@@ -1,0 +1,212 @@
+[
+  {
+    "hash": "595894f057ff828934cb23113adff9017e1600e3",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Robust git-history fix for Render production"
+  },
+  {
+    "hash": "c97fb1130fa4451031fbbd836b8baa9b83d1ea7e",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Fix shallow clone history on Render"
+  },
+  {
+    "hash": "3d4125e9c0c3fbb8484923e72924d142f8480938",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Implement Jira-style Release History with persistent comments"
+  },
+  {
+    "hash": "7aa2b94d8495e04086bc47c10f44adaf4d7df231",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Fix BioMistral model identifier mismatch"
+  },
+  {
+    "hash": "6cbe42f98d3a93358ca8a8198258e70d9a9efdd8",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Optimize AI search performance and fix result click crash"
+  },
+  {
+    "hash": "b3a21059813c084478381be77fb20c207509803d",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Update walkthrough with connectivity warnings for local LLMs"
+  },
+  {
+    "hash": "2d130ed21b922b9ff9b254227055a94ff56bacb4",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Add LLM validation logging and update walkthrough"
+  },
+  {
+    "hash": "a6182595da7b2c660e15f41aedaa92fc0aaf9a4a",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Integrate Local Ollama LLMs (BioMistral & Llama 3.2)"
+  },
+  {
+    "hash": "2c3872b323a93d829443242304aab3cb0ab4415d",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Update README with BETA access and description"
+  },
+  {
+    "hash": "6e97994e3b3cf51a8ab63567d0ea9b2f6aecf1e2",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Add BETA MVP Banner v1.5"
+  },
+  {
+    "hash": "aa3e486d6995fb112586eb925aed1ad05d918e5a",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Implement MEP Domain Guard for AI Search"
+  },
+  {
+    "hash": "3ee7bba56a97718cfa32fe406a07711ef9a15716",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Implement intelligent equipment visibility and local JSON viewing"
+  },
+  {
+    "hash": "61d17e04b718c0d31fc34161d0d40a115c80036d",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Add custom validation message and finalize onboarding UI"
+  },
+  {
+    "hash": "9df40f4bf2d94863263fb0f23d8c376e2bd93cc0",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Replace legacy upload with premium onboarding summary"
+  },
+  {
+    "hash": "4c27de3fa1b8a0e0ad33d74233d80ef7a16f0c2f",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Enforce explicit file selection with placeholder"
+  },
+  {
+    "hash": "1090968f56ebe0698e87e0b3768f25ad1b84db14",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Implement Dual-Method Audit Selection (Server vs Local)"
+  },
+  {
+    "hash": "fc60b3237d4aaeda3db07f340853aed3f0bb3b6b",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "UI: Update Run Audit label in index.html"
+  },
+  {
+    "hash": "803fb6d8ca44b7b55eab48115bc19fb9861c2412",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Implement Three-Tier AI Knowledge System with Wikipedia integration"
+  },
+  {
+    "hash": "27980141348c2d8c83afbb3a01f649834618f314",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Fix AI Insight button mapping for expanded standards DB"
+  },
+  {
+    "hash": "d7f1821ab0f5e3d420a8c179866803e5ce639f25",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Expand AI Standards database with deep technical MEP data"
+  },
+  {
+    "hash": "11d976130de31a9d84637eaaf808c54f6a7f06c5",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Fix syntax error in main.js causing build failure"
+  },
+  {
+    "hash": "fe0a28c1e509cb477d83de1d46a3fa60d8bfffd2",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Make AI search results clickable and interactive"
+  },
+  {
+    "hash": "9678c024b85689f72517c95f2a70a778b508595e",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Fix AI results clipping and double search widget size"
+  },
+  {
+    "hash": "26ca0e16a2253390020ef2386f2d10f999fdbf0a",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Enhance AI Expert search UI with button and larger input"
+  },
+  {
+    "hash": "000c78d1ebdfdf67b24999cd18ce50294ca9eaab",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Consolidate project files into audit-viewer for Render compatibility"
+  },
+  {
+    "hash": "f49abd0051f4e1aadd6b3f912e270b5586f8ee24",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Add debug logging for file paths"
+  },
+  {
+    "hash": "61235158439788094d912bf305254637a758d277",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "use regex literal for Express 5 compat"
+  },
+  {
+    "hash": "f3d25e3d9850aba5ae8c60f58ed3434cfa092037",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Fix Express 5 wildcard syntax for Render"
+  },
+  {
+    "hash": "432735e7d59e4a1348aa4346395f4a3b61112efb",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Confirmed fix for Render routing"
+  },
+  {
+    "hash": "a67a5e66d7b8f4f261fd628752d41bb5e5263cde",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "fix homepage routing for render deployment"
+  },
+  {
+    "hash": "23348c998bc958c0c2a2039ce7c8515f2aa4fe2e",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Allow dynamic API URL for cloud hosting"
+  },
+  {
+    "hash": "b6eb8bccdb51fa28fbaf1a65ebdf8b373898fc26",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Update project title to include 'MVP'"
+  },
+  {
+    "hash": "39798fc275be13a08ecda3b617bc4c03e0349e09",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Add project title and description to README"
+  },
+  {
+    "hash": "f56b4405033a9b1d2e4009664179309adf5cc8ba",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Final cloud-hosting compatibility fixes"
+  },
+  {
+    "hash": "abde2bb54831f8a6853c7373b1eaa2475562a747",
+    "author": "Richmbrm",
+    "date": "2025-12-27",
+    "message": "Initial MVP Release - MEP Audit System"
+  }
+]
