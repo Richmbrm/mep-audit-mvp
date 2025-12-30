@@ -1,0 +1,33 @@
+
+JOB REFERENCE: TestLLMLocal
+INPUT FILE: MEPComponents.csv
+RUN DATE: 2025-12-30 17:51:42
+AUDIT LOGS: 
+ - /home/richm/Documents/AG_Project2/audit-viewer/audit runs/audit_1.txt
+ - /home/richm/Documents/AG_Project2/audit-viewer/audit runs/audit_1.json
+
+============================================================
+--- MEP VALIDATION REPORT (ISO 14644-1 COMPLIANCE) ---
+============================================================
+Room: Tissue Culture Lab 01     | ACH:  42.67 | Status: PASS | Comfort: Sub-optimal
+Room: General Prep Area         | ACH:    7.5 | Status: FAIL | Comfort: Optimal
+Room: Storage Room              | ACH:   3.33 | Status: FAIL | Comfort: Optimal
+Room: Analytical Lab            | ACH:  44.44 | Status: PASS | Comfort: Sub-optimal
+
+============================================================
+--- EQUIPMENT SCHEDULE VALIDATION ---
+============================================================
+Mark       | Category        | Status | Issues
+------------------------------------------------------------
+P-01       | Pump            | PASS   | None
+EF-01      | Fan             | PASS   | None
+CH-01      | Chiller         | PASS   | None
+VAV-1-01   | Terminal Unit   | PASS   | None
+CU-01      | Condensing Unit | PASS   | None
+
+============================================================
+Report complete for Job: TestLLMLocal
+Audits saved to:
+ - /home/richm/Documents/AG_Project2/audit-viewer/audit runs/audit_1.txt
+ - /home/richm/Documents/AG_Project2/audit-viewer/audit runs/audit_1.json
+============================================================

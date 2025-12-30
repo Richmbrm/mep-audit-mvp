@@ -44,6 +44,15 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
   ? `http://${window.location.hostname}:3001/api`
   : '/api';
 
+// Utility: Debounce
+function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
+
 // Reset Functionality
 resetBtn.addEventListener('click', () => {
   // Hide sections
@@ -349,14 +358,16 @@ async function performSearch(query) {
   if (html) {
     searchResults.innerHTML = html;
 
-    // Add click listeners to LOCAL results only
-    const items = searchResults.querySelectorAll('.result-item:not(.wiki-result)');
+    // Add click listeners to LOCAL results only (those with data-index)
+    const items = searchResults.querySelectorAll('.result-item[data-index]');
     items.forEach(item => {
       item.addEventListener('click', () => {
         const idx = item.getAttribute('data-index');
         const selected = results[idx];
-        displayFocusedInsight(selected);
-        searchResults.classList.add('hidden');
+        if (selected) {
+          displayFocusedInsight(selected);
+          searchResults.classList.add('hidden');
+        }
       });
     });
 
@@ -368,8 +379,10 @@ async function performSearch(query) {
   }
 }
 
+const debouncedSearch = debounce((q) => performSearch(q), 400);
+
 standardsSearch.addEventListener('input', (e) => {
-  performSearch(e.target.value.toLowerCase());
+  debouncedSearch(e.target.value.toLowerCase());
 });
 
 searchBtn.addEventListener('click', () => {
