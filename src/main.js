@@ -212,7 +212,7 @@ async function performLLMReasoning(query) {
   const model = llmModelSelect.value;
   let systemPrompt = "You are a professional MEP and ISO 14644 Compliance Engineer. Your goal is to provide deep technical reasoning for audit results. Be concise and technical.";
 
-  if (model === 'biomistral') {
+  if (model.includes('biomistral')) {
     systemPrompt += " Use your scientific and cleanroom expertise to provide highly detailed filtration and contamination control insights.";
   }
 
