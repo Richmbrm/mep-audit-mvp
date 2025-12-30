@@ -33,25 +33,43 @@
     <section class="run-audit-section">
       <div class="card">
         <span class="card-title">Run New Audit to create a new .json report</span>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="fileSelect" style="display: flex; justify-content: space-between;">
-              Select Source File
-              <span id="refreshFiles" style="cursor: pointer; font-size: 0.8rem; color: var(--color-primary);">🔄
-                Refresh</span>
-              <span id="lastUpdated"
-                style="font-size: 0.7rem; color: var(--color-text-dim); margin-left: 0.5rem;"></span>
-            </label>
-            <select id="fileSelect">
-              <option value="">Loading files...</option>
-            </select>
+
+        <div class="audit-options-container">
+          <!-- Option 1: Existing File -->
+          <div class="audit-option">
+            <label class="option-label">Option 1: Select from Server</label>
+            <div class="form-group">
+              <label for="fileSelect" style="display: flex; justify-content: space-between;">
+                Source File
+                <span id="refreshFiles" style="cursor: pointer; font-size: 0.8rem; color: var(--color-primary);">🔄
+                  Refresh</span>
+                <span id="lastUpdated"
+                  style="font-size: 0.7rem; color: var(--color-text-dim); margin-left: 0.5rem;"></span>
+              </label>
+              <select id="fileSelect">
+                <option value="">Loading files...</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="jobRefInput">Job Reference</label>
-            <input type="text" id="jobRefInput" placeholder="e.g. CITY-AUDIT-2025" />
+
+          <div class="option-divider"><span>OR</span></div>
+
+          <!-- Option 2: Upload New File -->
+          <div class="audit-option">
+            <label class="option-label">Option 2: Upload Local File</label>
+            <div class="form-group">
+              <label for="runFileInput">Choose CSV File</label>
+              <input type="file" id="runFileInput" accept=".csv" />
+            </div>
           </div>
-          <button id="runBtn" class="primary-btn">🚀 Run Audit Now</button>
         </div>
+
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label for="jobRefInput">Job Reference</label>
+          <input type="text" id="jobRefInput" placeholder="e.g. CITY-AUDIT-2025" />
+        </div>
+
+        <button id="runBtn" class="primary-btn" style="width: 100%; margin-top: 1rem;">🚀 Run Audit Now</button>
         <div id="runStatus" class="hidden" style="margin-top: 1rem; color: var(--color-primary); font-size: 0.875rem;">
           ⚙️ Processing Audit... please wait...
         </div>

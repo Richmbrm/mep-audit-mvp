@@ -40,14 +40,25 @@ app.get('/api/files', (req, res) => {
 
 // Endpoint to run the audit
 app.post('/api/run-audit', (req, res) => {
-    const { fileName, jobRef } = req.body;
+    const { fileName, jobRef, fileContent } = req.body;
 
     if (!fileName || !jobRef) {
         return res.status(400).json({ error: 'Missing filename or job reference' });
     }
 
     const scriptPath = path.join(PROJECT_ROOT, 'mep_validator_agent_v2.py');
-    const filePath = path.join(PROJECT_ROOT, fileName);
+    let filePath = path.join(PROJECT_ROOT, fileName);
+
+    // If file content is provided, save it as a new file on the server first
+    if (fileContent) {
+        try {
+            fs.writeFileSync(filePath, fileContent);
+            console.log(`Saved uploaded file to: ${filePath}`);
+        } catch (err) {
+            console.error('Failed to save uploaded file:', err);
+            return res.status(500).json({ error: 'Failed to save uploaded file' });
+        }
+    }
 
     // Command to run the python script
     const command = `python3 "${scriptPath}" --file "${filePath}" --job "${jobRef}"`;

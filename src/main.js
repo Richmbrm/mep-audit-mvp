@@ -35,6 +35,7 @@ const jobRefInput = document.getElementById('jobRefInput');
 const runBtn = document.getElementById('runBtn');
 const runStatus = document.getElementById('runStatus');
 const resetBtn = document.getElementById('resetBtn');
+const runFileInput = document.getElementById('runFileInput');
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? `http://${window.location.hostname}:3001/api`
@@ -82,10 +83,22 @@ if (refreshFiles) {
 }
 
 runBtn.addEventListener('click', async () => {
-  const fileName = fileSelect.value;
+  let fileName = fileSelect.value;
+  let fileContent = null;
   const jobRef = jobRefInput.value;
 
-  if (!fileName || !jobRef) return alert('Please select a file and enter a job reference');
+  // Check if user uploaded a local file (Option 2)
+  if (runFileInput.files.length > 0) {
+    const file = runFileInput.files[0];
+    fileName = file.name;
+    fileContent = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsText(file);
+    });
+  }
+
+  if (!fileName || !jobRef) return alert('Please select a file (from server or computer) and enter a job reference');
 
   runBtn.disabled = true;
   runStatus.classList.remove('hidden');
@@ -94,7 +107,7 @@ runBtn.addEventListener('click', async () => {
     const res = await fetch(`${API_BASE}/run-audit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fileName, jobRef })
+      body: JSON.stringify({ fileName, jobRef, fileContent })
     });
 
     const data = await res.json();
@@ -102,6 +115,10 @@ runBtn.addEventListener('click', async () => {
 
     renderDashboard(data, fileName);
     alert('Audit Successful!');
+
+    // Refresh the files list in case a new file was uploaded to the server
+    if (fileContent) fetchFiles();
+
   } catch (err) {
     alert(`Error: ${err.message}`);
   } finally {
