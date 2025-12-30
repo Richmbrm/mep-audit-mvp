@@ -1,5 +1,11 @@
 [
   {
+    "hash": "263f2ac00bc27cf77afa64432548d78d31bfeab0",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Silence render gin logs and sync history manifest"
+  },
+  {
     "hash": "c419c584bc474d28f30324188a038b8234ebae5f",
     "author": "Richmbrm",
     "date": "2025-12-30",
