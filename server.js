@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 const PROJECT_ROOT = __dirname;
-const COMMENTS_FILE = path.join(PROJECT_ROOT, 'comments.json');
+const COMMENTS_FILE = path.join(PROJECT_ROOT, 'src', 'comments.json');
 
 app.use(cors());
 app.use(express.json());

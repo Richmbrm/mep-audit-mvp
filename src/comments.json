@@ -1,0 +1,4 @@
+{
+  "6cbe42f98d3a93358ca8a8198258e70d9a9efdd8": "Testing with Ollama and llama3.2 Latest local copy, Bio Mistral 7B local copy.  Had issues with render.com hosting as it could not access local LLMs, no surprise. local host:3001 works but is slow",
+  "21ddb3648d923ed566324e4941d828b8a32129b3": "This release worked, seemed there was an issue with the way git repos refer to history. Script logic should now refer to copy of history in a saved location on git, but need to verify this.\nREMEMBER\nrender.com and local copies are not synched so keep updates on either local or render host"
+}
