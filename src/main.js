@@ -1,8 +1,6 @@
 import './style.css'
 import { STANDARDS_DB } from './standards.js'
 
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
 const dashboard = document.getElementById('dashboard');
 
 // Metrics
@@ -53,7 +51,6 @@ resetBtn.addEventListener('click', () => {
   standardsSearch.value = '';
   fileSelect.value = '';
   runFileInput.value = '';
-  fileInput.value = '';
 
   // Smooth scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,28 +127,8 @@ runBtn.addEventListener('click', async () => {
   }
 });
 
-dropzone.addEventListener('click', () => fileInput.click());
 
-dropzone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  dropzone.style.borderColor = 'var(--color-primary)';
-  dropzone.style.background = 'rgba(59, 130, 246, 0.05)';
-});
-
-dropzone.addEventListener('dragleave', () => {
-  dropzone.style.borderColor = 'var(--color-border)';
-  dropzone.style.background = 'var(--color-surface)';
-});
-
-dropzone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  const files = e.dataTransfer.files;
-  if (files.length > 0) handleFiles(files);
-});
-
-fileInput.addEventListener('change', (e) => {
-  if (e.target.files.length > 0) handleFiles(e.target.files);
-});
+// Dropzone logic removed as per design update
 
 function displayFocusedInsight(res) {
   aiExpertContent.innerHTML = `

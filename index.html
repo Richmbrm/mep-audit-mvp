@@ -16,19 +16,33 @@
     <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
       <div style="text-align: left;">
         <h1>MEP Audit Viewer</h1>
-        <p style="color: var(--color-text-dim)">Upload your JSON audit logs to visualize compliance reports.</p>
+        <p style="color: var(--color-text-dim)">Compliance Validation & Engineering Intelligence Dashboard</p>
       </div>
       <button id="resetBtn" class="secondary-btn">🔄 Reset Interface</button>
     </header>
 
-    <div id="dropzone" class="upload-container">
-      <span class="upload-icon">📁</span>
-      <p><strong>Click to upload</strong> or drag and drop</p>
-      <p style="font-size: 0.875rem; color: var(--color-text-dim)">Select .json files from your audit runs</p>
-      <input type="file" id="fileInput" class="hidden" multiple accept=".json" />
-    </div>
-
-    <div class="divider"><span>OR</span></div>
+    <section class="onboarding-panel animate-in">
+      <div class="onboarding-grid">
+        <div class="onboarding-item">
+          <span class="step-num">1</span>
+          <h4>Select Source</h4>
+          <p>Choose a CSV from the server or upload your own local equipment schedule below.</p>
+        </div>
+        <div class="onboarding-item">
+          <span class="step-num">2</span>
+          <h4>Validate</h4>
+          <p>Our Python agent analyzes ACH, Room Volume, and Equipment specs against ISO standards.</p>
+        </div>
+        <div class="onboarding-item">
+          <span class="step-num">3</span>
+          <h4>Insight</h4>
+          <p>Review the compliance dashboard and use the AI Expert to troubleshoot failures.</p>
+        </div>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--color-primary);">
+        👇 <strong>Get started by running a new audit below</strong>
+      </div>
+    </section>
 
     <section class="run-audit-section">
       <div class="card">
