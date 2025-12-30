@@ -117,19 +117,37 @@ app.post('/api/ai-chat', async (req, res) => {
 
 // Endpoint to fetch Git History
 app.get('/api/git-history', (req, res) => {
-    // Fetch last 50 commits
-    const cmd = `git log -n 50 --pretty=format:"%H|%an|%ad|%s" --date=short`;
-    exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout) => {
-        if (error) {
-            console.error('Git error:', error);
-            return res.status(500).json({ error: 'Failed to fetch git history' });
-        }
-        const history = stdout.split('\n').filter(Boolean).map(line => {
-            const [hash, author, date, message] = line.split('|');
-            return { hash, author, date, message };
+    const getLog = () => {
+        const cmd = `git log -n 50 --pretty=format:"%H|%an|%ad|%s" --date=short`;
+        exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout) => {
+            if (error) {
+                console.error('Git error:', error);
+                return res.status(500).json({ error: 'Failed to fetch git history' });
+            }
+            const history = stdout.split('\n').filter(Boolean).map(line => {
+                const [hash, author, date, message] = line.split('|');
+                return { hash, author, date, message };
+            });
+
+            // If we only have 1 commit and might be shallow, attempt to deepen (Production fix)
+            const isProbablyShallow = history.length === 1 && fs.existsSync(path.join(PROJECT_ROOT, '.git/shallow'));
+
+            if (isProbablyShallow && !req.query.retried) {
+                console.log('Shallow clone detected on Render. Attempting to deepen history...');
+                exec(`git fetch --depth=50`, { cwd: PROJECT_ROOT }, (fetchErr) => {
+                    if (fetchErr) {
+                        console.error('Failed to unshallow repo:', fetchErr);
+                        return res.json(history); // Return what we have
+                    }
+                    // Retry once
+                    res.redirect('/api/git-history?retried=true');
+                });
+            } else {
+                res.json(history);
+            }
         });
-        res.json(history);
-    });
+    };
+    getLog();
 });
 
 // Endpoint to fetch persistent comments
