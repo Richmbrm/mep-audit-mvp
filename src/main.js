@@ -184,9 +184,11 @@ async function checkLLMStatus() {
       body: JSON.stringify({ prompt: 'hi', model: llmModelSelect.value })
     });
     if (res.ok) {
+      console.info(`✓ Ollama check: "${llmModelSelect.value}" is ONLINE`);
       llmStatus.classList.add('online');
       llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Online';
     } else {
+      console.warn(`✗ Ollama check: "${llmModelSelect.value}" status code ${res.status}`);
       llmStatus.classList.remove('online');
       llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Offline';
     }
