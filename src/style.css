@@ -41,9 +41,57 @@ body {
 #app {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.beta-banner {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 1rem 1rem;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  animation: slideDown 0.5s ease-out;
+}
+
+.beta-tag {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.version-tag {
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.banner-msg {
+  color: var(--color-text-dim);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Header & Upload Section */
