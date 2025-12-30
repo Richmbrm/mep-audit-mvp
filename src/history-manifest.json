@@ -1,5 +1,11 @@
 [
   {
+    "hash": "5588bf5c29a3cbe1f168986d23d01cb5da689896",
+    "author": "Richmbrm",
+    "date": "2025-12-30",
+    "message": "Deploy bulletproof build-time history manifest for Render"
+  },
+  {
     "hash": "595894f057ff828934cb23113adff9017e1600e3",
     "author": "Richmbrm",
     "date": "2025-12-30",
