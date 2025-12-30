@@ -51,6 +51,8 @@ resetBtn.addEventListener('click', () => {
   // Clear inputs
   jobRefInput.value = '';
   standardsSearch.value = '';
+  fileSelect.value = '';
+  runFileInput.value = '';
   fileInput.value = '';
 
   // Smooth scroll to top
@@ -66,7 +68,8 @@ async function fetchFiles() {
     const files = await res.json();
     if (!Array.isArray(files)) throw new Error('Response is not an array');
     console.log('Backend returned files:', files);
-    fileSelect.innerHTML = files.map(f => `<option value="${f}">${f}</option>`).join('');
+    fileSelect.innerHTML = '<option value="">Choose File from List</option>' +
+      files.map(f => `<option value="${f}">${f}</option>`).join('');
     if (lastUpdated) lastUpdated.textContent = `(Updated: ${new Date().toLocaleTimeString()})`;
   } catch (err) {
     console.error('Fetch error:', err);
