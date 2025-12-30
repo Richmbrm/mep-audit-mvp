@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release History | MEP Audit Viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <nav class="jira-nav">
+            <div class="nav-left">
+                <span class="jira-logo">🟦</span>
+                <span class="jira-brand">Jira | MEP Projects</span>
+            </div>
+            <a href="index.html" class="nav-back">← Back to Auditor Dashboard</a>
+        </nav>
+
+        <header class="history-header">
+            <div class="header-content">
+                <h1>Sprint Commits & Pushes</h1>
+                <p class="subtitle">Continuous Integration & Deployment Tracking</p>
+            </div>
+            <div class="status-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Project</span>
+                    <span class="summary-val">MEP-AUDIT-MVP</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Status</span>
+                    <span class="summary-badge">IN PROGRESS</span>
+                </div>
+            </div>
+        </header>
+
+        <main id="history-board" class="jira-board">
+            <div class="board-column">
+                <h2 class="column-title">DONE / PUSHED (50)</h2>
+                <div id="commit-list" class="commit-list">
+                    <div class="jira-card loading">
+                        <div class="loading-spinner"></div>
+                        <p>Fetching Git Log...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="history-footer">
+            <p>© 2025 MEP Audit Solutions | Engineering Intelligence Dashboard</p>
+        </footer>
+    </div>
+    <script type="module" src="/src/history.js"></script>
+</body>
+
+</html>

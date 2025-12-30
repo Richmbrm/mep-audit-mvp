@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 const PROJECT_ROOT = __dirname;
+const COMMENTS_FILE = path.join(PROJECT_ROOT, 'comments.json');
 
 app.use(cors());
 app.use(express.json());
@@ -111,6 +112,56 @@ app.post('/api/ai-chat', async (req, res) => {
             error: 'Local LLM offline or unreachable',
             details: 'Ensure Ollama is running at http://localhost:11434'
         });
+    }
+});
+
+// Endpoint to fetch Git History
+app.get('/api/git-history', (req, res) => {
+    // Fetch last 50 commits
+    const cmd = `git log -n 50 --pretty=format:"%H|%an|%ad|%s" --date=short`;
+    exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout) => {
+        if (error) {
+            console.error('Git error:', error);
+            return res.status(500).json({ error: 'Failed to fetch git history' });
+        }
+        const history = stdout.split('\n').filter(Boolean).map(line => {
+            const [hash, author, date, message] = line.split('|');
+            return { hash, author, date, message };
+        });
+        res.json(history);
+    });
+});
+
+// Endpoint to fetch persistent comments
+app.get('/api/comments', (req, res) => {
+    if (!fs.existsSync(COMMENTS_FILE)) return res.json({});
+    try {
+        const data = fs.readFileSync(COMMENTS_FILE, 'utf8');
+        res.json(JSON.parse(data));
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to read comments' });
+    }
+});
+
+// Endpoint to save a comment
+app.post('/api/comments', (req, res) => {
+    const { hash, comment } = req.body;
+    if (!hash) return res.status(400).json({ error: 'Missing hash' });
+
+    let comments = {};
+    if (fs.existsSync(COMMENTS_FILE)) {
+        try {
+            comments = JSON.parse(fs.readFileSync(COMMENTS_FILE, 'utf8'));
+        } catch (e) {
+            console.error('JSON parse error on comments:', e);
+        }
+    }
+    comments[hash] = comment;
+    try {
+        fs.writeFileSync(COMMENTS_FILE, JSON.stringify(comments, null, 2));
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to save comment' });
     }
 });
 
