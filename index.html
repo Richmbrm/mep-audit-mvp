@@ -145,9 +145,18 @@
       <section id="aiExpert" class="ai-expert-panel animate-in hidden">
         <div class="ai-expert-header">
           <span class="ai-icon">🤖</span>
-          <div>
+          <div style="flex: 1;">
             <h3>AI Standards Insight</h3>
             <p style="font-size: 0.75rem; color: var(--color-text-dim)">Context-aware compliance expert</p>
+          </div>
+          <div class="llm-controls">
+            <select id="llmModelSelect" class="mini-select">
+              <option value="biomistral">BioMistral 7B (Scientific)</option>
+              <option value="llama3.2">Llama 3.2 (Reasoning)</option>
+            </select>
+            <span id="llmStatus" class="status-dot tooltip">
+              <span class="tooltip-text">Local LLM Offline</span>
+            </span>
           </div>
         </div>
         <div id="aiExpertContent" class="ai-expert-body">

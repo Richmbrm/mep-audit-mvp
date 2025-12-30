@@ -84,6 +84,36 @@ app.post('/api/run-audit', (req, res) => {
     });
 });
 
+// Endpoint for Ollama LLM integration
+app.post('/api/ai-chat', async (req, res) => {
+    const { prompt, model = 'biomistral' } = req.body;
+
+    try {
+        const response = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: model,
+                prompt: prompt,
+                stream: false
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ollama error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        res.json({ response: data.response });
+    } catch (err) {
+        console.error('AI Chat error:', err);
+        res.status(503).json({
+            error: 'Local LLM offline or unreachable',
+            details: 'Ensure Ollama is running at http://localhost:11434'
+        });
+    }
+});
+
 // 2. STATIC FILES & CATCH-ALL (AFTER API)
 const DIST_PATH = path.join(__dirname, 'dist');
 app.use(express.static(DIST_PATH));

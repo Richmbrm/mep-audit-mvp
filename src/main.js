@@ -27,6 +27,8 @@ const aiExpertContent = document.getElementById('aiExpertContent');
 const standardsSearch = document.getElementById('standardsSearch');
 const searchBtn = document.getElementById('searchBtn');
 const searchResults = document.getElementById('searchResults');
+const llmModelSelect = document.getElementById('llmModelSelect');
+const llmStatus = document.getElementById('llmStatus');
 
 // Backend Integration
 const fileSelect = document.getElementById('fileSelect');
@@ -173,6 +175,52 @@ const DOMAIN_KEYWORDS = [
   'Safety', 'Filter', 'Clean room', 'Laminar', 'Air change', 'Particle'
 ];
 
+// LLM Integration Functions
+async function checkLLMStatus() {
+  try {
+    const res = await fetch(`${API_BASE}/ai-chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'hi', model: llmModelSelect.value })
+    });
+    if (res.ok) {
+      llmStatus.classList.add('online');
+      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Online';
+    } else {
+      llmStatus.classList.remove('online');
+      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Offline';
+    }
+  } catch (e) {
+    llmStatus.classList.remove('online');
+  }
+}
+checkLLMStatus();
+llmModelSelect.addEventListener('change', checkLLMStatus);
+
+async function performLLMReasoning(query) {
+  const model = llmModelSelect.value;
+  let systemPrompt = "You are a professional MEP and ISO 14644 Compliance Engineer. Your goal is to provide deep technical reasoning for audit results. Be concise and technical.";
+
+  if (model === 'biomistral') {
+    systemPrompt += " Use your scientific and cleanroom expertise to provide highly detailed filtration and contamination control insights.";
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/ai-chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: `${systemPrompt}\n\nQuestion: ${query}`,
+        model: model
+      })
+    });
+    const data = await res.json();
+    return data.response || null;
+  } catch (e) {
+    return null;
+  }
+}
+
 function displayFocusedInsight(res) {
   aiExpertContent.innerHTML = `
     <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary);">
@@ -253,8 +301,9 @@ async function performSearch(query) {
   }
   search(STANDARDS_DB);
 
+  let html = ''; // Initialize html here
+
   // --- TIER 1: LOCAL RESULTS ---
-  let html = '';
   if (results.length > 0) {
     html += results.slice(0, 5).map((res, index) => `
       <div class="result-item" data-index="${index}" style="cursor: pointer;">
@@ -279,7 +328,20 @@ async function performSearch(query) {
     }
   }
 
-  // --- TIER 3: EXTERNAL DEEP LINKS ---
+  // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
+  if (llmStatus.classList.contains('online')) {
+    const reasoning = await performLLMReasoning(query);
+    if (reasoning) {
+      html += `
+        <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); margin-bottom: 0.5rem; border-radius: 0.5rem; padding: 1rem;">
+          <span class="insight-tag">🌟 DEEP REASONING (${llmModelSelect.value.toUpperCase()})</span>
+          <p style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
+        </div>
+      `;
+    }
+  }
+
+  // --- TIER 4: EXTERNAL DEEP LINKS ---
   html += generateExternalLinks(query);
 
   if (html) {
