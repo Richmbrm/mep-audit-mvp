@@ -82,6 +82,20 @@ if (refreshFiles) {
   });
 }
 
+// Clear Option 2 if Option 1 is selected
+fileSelect.addEventListener('change', () => {
+  if (fileSelect.value) {
+    runFileInput.value = '';
+  }
+});
+
+// Clear Option 1 if Option 2 is selected
+runFileInput.addEventListener('change', () => {
+  if (runFileInput.files.length > 0) {
+    fileSelect.value = '';
+  }
+});
+
 runBtn.addEventListener('click', async () => {
   let fileName = fileSelect.value;
   let fileContent = null;
@@ -98,7 +112,8 @@ runBtn.addEventListener('click', async () => {
     });
   }
 
-  if (!fileName || !jobRef) return alert('Please select a file (from server or computer) and enter a job reference');
+  if (!fileName) return alert('No Data to Process at this time. Choose a .csv file if you want to process a Room Schedule');
+  if (!jobRef) return alert('Please enter a Job Reference to continue');
 
   runBtn.disabled = true;
   runStatus.classList.remove('hidden');

@@ -62,54 +62,48 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-.upload-container {
+.onboarding-panel {
   background: var(--color-surface);
-  border: 1px dashed var(--color-border);
-  border-radius: 1rem;
-  padding: 3rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
   margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.upload-container:hover {
-  border-color: var(--color-primary);
-  background: rgba(59, 130, 246, 0.05);
+.onboarding-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
-.upload-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-/* Run Audit Section */
-.divider {
+.onboarding-item {
   text-align: center;
-  margin: 2rem 0;
-  position: relative;
 }
 
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-border);
-  z-index: 1;
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-primary);
+  border-radius: 50%;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-primary);
 }
 
-.divider span {
-  background: var(--color-bg);
-  padding: 0 1rem;
+.onboarding-item h4 {
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.onboarding-item p {
+  font-size: 0.875rem;
   color: var(--color-text-dim);
-  font-size: 0.75rem;
-  font-weight: 700;
-  position: relative;
-  z-index: 2;
+  line-height: 1.5;
 }
 
 .run-audit-section {
