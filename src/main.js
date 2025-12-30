@@ -145,7 +145,36 @@ function displayFocusedInsight(res) {
   `;
   aiExpert.classList.remove('hidden');
 }
-function performSearch(query) {
+async function performWikipediaSearch(query) {
+  try {
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`;
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return {
+      title: data.title,
+      extract: data.extract,
+      url: data.content_urls.desktop.page
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function generateExternalLinks(query) {
+  return `
+    <div class="external-search-links" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--color-border);">
+      <p style="font-size: 0.75rem; color: var(--color-text-dim); margin-bottom: 0.5rem;">Deep search on industry sites:</p>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="https://www.hse.gov.uk/search/results.htm?q=${encodeURIComponent(query)}" target="_blank" class="external-link-tag">HSE.gov.uk</a>
+        <a href="https://www.iso.org/search.html?q=${encodeURIComponent(query)}" target="_blank" class="external-link-tag">ISO.org</a>
+        <a href="https://www.google.com/search?q=site:ashrae.org+${encodeURIComponent(query)}" target="_blank" class="external-link-tag">ASHRAE</a>
+      </div>
+    </div>
+  `;
+}
+
+async function performSearch(query) {
   if (!query) {
     searchResults.classList.add('hidden');
     return;
@@ -164,16 +193,40 @@ function performSearch(query) {
   }
   search(STANDARDS_DB);
 
+  // --- TIER 1: LOCAL RESULTS ---
+  let html = '';
   if (results.length > 0) {
-    searchResults.innerHTML = results.slice(0, 5).map((res, index) => `
+    html += results.slice(0, 5).map((res, index) => `
       <div class="result-item" data-index="${index}" style="cursor: pointer;">
-        <span class="insight-tag">${res.path}</span>
+        <span class="insight-tag">LOCAL EXPERT: ${res.path}</span>
         <p style="margin: 0.25rem 0">${res.value}</p>
       </div>
     `).join('');
+  }
 
-    // Add click listeners to each result
-    const items = searchResults.querySelectorAll('.result-item');
+  // --- TIER 2: WIKIPEDIA (IF NEEDED OR FOR BROAD TERMS) ---
+  if (results.length < 3 || query.split(' ').length > 1) {
+    const wiki = await performWikipediaSearch(query);
+    if (wiki) {
+      html += `
+        <div class="result-item wiki-result" style="border-left-color: #72777d;">
+          <span class="insight-tag">GLOBAL CONTEXT (WIKIPEDIA)</span>
+          <p style="font-weight: 600; margin-bottom: 0.25rem;">${wiki.title}</p>
+          <p style="font-size: 0.875rem; color: var(--color-text-dim)">${wiki.extract.substring(0, 150)}...</p>
+          <a href="${wiki.url}" target="_blank" style="font-size: 0.75rem; color: var(--color-primary)">Read full article</a>
+        </div>
+      `;
+    }
+  }
+
+  // --- TIER 3: EXTERNAL DEEP LINKS ---
+  html += generateExternalLinks(query);
+
+  if (html) {
+    searchResults.innerHTML = html;
+
+    // Add click listeners to LOCAL results only
+    const items = searchResults.querySelectorAll('.result-item:not(.wiki-result)');
     items.forEach(item => {
       item.addEventListener('click', () => {
         const idx = item.getAttribute('data-index');
@@ -185,7 +238,8 @@ function performSearch(query) {
 
     searchResults.classList.remove('hidden');
   } else {
-    searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found</p>';
+    searchResults.innerHTML = '<p style="font-size: 0.875rem; color: var(--color-text-dim)">No matching standards found. Try a broader term.</p>';
+    searchResults.innerHTML += generateExternalLinks(query);
     searchResults.classList.remove('hidden');
   }
 }
