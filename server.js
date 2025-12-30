@@ -115,53 +115,25 @@ app.post('/api/ai-chat', async (req, res) => {
     }
 });
 
-// Endpoint to fetch Git History (Robust version for Production/Render)
+// Endpoint to fetch Git History (Simple version for Local/Dev check)
 app.get('/api/git-history', (req, res) => {
     const gitDir = path.join(PROJECT_ROOT, '.git');
 
-    // Check if Git exists at all
     if (!fs.existsSync(gitDir)) {
-        console.warn('Production: No .git directory found. History logic bypassed.');
-        return res.json([{
-            hash: 'N/A',
-            author: 'System',
-            date: new Date().toISOString().split('T')[0],
-            message: 'Release History unavailable (No .git folder Found)'
-        }]);
+        return res.json([]);
     }
 
-    const runGitLog = (callback) => {
-        const cmd = `git log -n 50 --pretty=format:"%H|%an|%ad|%s" --date=short`;
-        exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout) => {
-            if (error) return callback(error);
-            const history = stdout.split('\n').filter(Boolean).map(line => {
-                const [hash, author, date, message] = line.split('|');
-                return { hash, author, date, message };
-            });
-            callback(null, history);
+    const cmd = `git log -n 50 --pretty=format:"%H|%an|%ad|%s" --date=short`;
+    exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout) => {
+        if (error) {
+            console.error('Git Log Error:', error);
+            return res.json([]);
+        }
+        const history = stdout.split('\n').filter(Boolean).map(line => {
+            const [hash, author, date, message] = line.split('|');
+            return { hash, author, date, message };
         });
-    };
-
-    runGitLog((err, history) => {
-        if (err) {
-            console.error('Git Log Error:', err);
-            return res.status(500).json({ error: 'Failed to fetch log' });
-        }
-
-        const isShallow = fs.existsSync(path.join(gitDir, 'shallow')) || (history.length <= 1 && history[0]?.message !== 'Initial commit');
-
-        if (isShallow && !req.query.skipFetch) {
-            console.log('Production: Shallow clone detected. Attempting history sync...');
-            exec(`git fetch origin main --depth=50`, { cwd: PROJECT_ROOT, timeout: 10000 }, (fetchErr) => {
-                if (fetchErr) {
-                    console.warn('Production: Fetch failed. Returning shallow log.', fetchErr.message);
-                    return res.json(history);
-                }
-                runGitLog((err2, history2) => res.json(history2 || history));
-            });
-        } else {
-            res.json(history);
-        }
+        res.json(history);
     });
 });
 
