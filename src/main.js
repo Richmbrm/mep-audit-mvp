@@ -167,6 +167,12 @@ runBtn.addEventListener('click', async () => {
 
 // Dropzone logic removed as per design update
 
+const DOMAIN_KEYWORDS = [
+  'MEP', 'HVAC', 'Cleanroom', 'ISO 14644', 'Standard', 'Airlock', 'HEPA', 'ACH',
+  'Pressure', 'Ventilation', 'Plumbing', 'Electrical', 'ASHRAE', 'Engineering',
+  'Safety', 'Filter', 'Clean room', 'Laminar', 'Air change', 'Particle'
+];
+
 function displayFocusedInsight(res) {
   aiExpertContent.innerHTML = `
     <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary);">
@@ -181,10 +187,30 @@ function displayFocusedInsight(res) {
 }
 async function performWikipediaSearch(query) {
   try {
-    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`;
-    const response = await fetch(url);
+    // Attempt 1: Context Anchored Search
+    let searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`;
+    let response = await fetch(searchUrl);
+
+    // If exact match fails, try adding " (HVAC)" for context
+    if (!response.ok) {
+      searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent((query + ' (HVAC)').replace(/ /g, '_'))}`;
+      response = await fetch(searchUrl);
+    }
+
     if (!response.ok) return null;
     const data = await response.json();
+
+    // Context Guard: Check if the extract is relevant to our domain
+    const isRelevant = DOMAIN_KEYWORDS.some(kw =>
+      data.extract.toLowerCase().includes(kw.toLowerCase()) ||
+      data.title.toLowerCase().includes(kw.toLowerCase())
+    );
+
+    if (!isRelevant) {
+      console.warn(`Wikipedia result for "${query}" filtered out by Domain Guard.`);
+      return null;
+    }
+
     return {
       title: data.title,
       extract: data.extract,
@@ -239,12 +265,12 @@ async function performSearch(query) {
   }
 
   // --- TIER 2: WIKIPEDIA (IF NEEDED OR FOR BROAD TERMS) ---
-  if (results.length < 3 || query.split(' ').length > 1) {
+  if (results.length < 3) {
     const wiki = await performWikipediaSearch(query);
     if (wiki) {
       html += `
         <div class="result-item wiki-result" style="border-left-color: #72777d;">
-          <span class="insight-tag">GLOBAL CONTEXT (WIKIPEDIA)</span>
+          <span class="insight-tag">🛡️ DOMAIN GUARDED (WIKIPEDIA)</span>
           <p style="font-weight: 600; margin-bottom: 0.25rem;">${wiki.title}</p>
           <p style="font-size: 0.875rem; color: var(--color-text-dim)">${wiki.extract.substring(0, 150)}...</p>
           <a href="${wiki.url}" target="_blank" style="font-size: 0.75rem; color: var(--color-primary)">Read full article</a>
