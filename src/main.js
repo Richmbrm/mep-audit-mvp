@@ -292,6 +292,20 @@ async function performSearch(query) {
     `).join('');
   }
 
+  // --- TIER 2: REGULATORY EVIDENCE (RAG) ---
+  const ragResults = await performRAGQuery(query);
+  if (ragResults && ragResults.length > 0) {
+    html += ragResults.map(res => `
+      <div class="result-item" style="border-left: 4px solid var(--color-warning); background: rgba(245, 158, 11, 0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+          <span class="insight-tag">📜 REGULATORY EVIDENCE: ${res.source}</span>
+          <button onclick="copyToClipboard('${res.content.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', this)" class="mini-copy-btn">📋 Copy</button>
+        </div>
+        <p style="font-size: 0.875rem; color: var(--color-text); line-height: 1.5;">"${res.content.substring(0, 300)}..."</p>
+      </div>
+    `).join('');
+  }
+
 
 
   // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
@@ -312,6 +326,20 @@ async function performSearch(query) {
   }
 
 
+  async function performRAGQuery(query) {
+    try {
+      const res = await fetch(`${API_BASE}/rag-query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.results || null;
+    } catch (e) {
+      return null;
+    }
+  }
 
   if (html) {
     searchResults.innerHTML = html;

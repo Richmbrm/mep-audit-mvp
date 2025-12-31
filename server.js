@@ -86,6 +86,33 @@ app.post('/api/run-audit', (req, res) => {
 });
 
 // Endpoint for Ollama LLM integration
+// Endpoint to query the local RAG Vector Database
+app.post('/api/rag-query', (req, res) => {
+    const { query } = req.body;
+    if (!query) return res.status(400).json({ error: 'Query is required' });
+
+    console.log(`RAG Query Initiated: "${query}"`);
+
+    // Execute the Python bridge script
+    // Using --break-system-packages context if needed, but here we just run python3 directly
+    const cmd = `python3 query_manuals.py "${query.replace(/"/g, '\\"')}"`;
+
+    exec(cmd, { cwd: PROJECT_ROOT, timeout: 15000 }, (error, stdout, stderr) => {
+        if (error) {
+            console.error('RAG Query Error:', stderr || error.message);
+            return res.status(500).json({ error: 'Failed to query vector database', details: stderr });
+        }
+
+        try {
+            const data = JSON.parse(stdout);
+            res.json(data);
+        } catch (parseErr) {
+            console.error('RAG Parse Error:', stdout);
+            res.status(500).json({ error: 'invalid response from RAG engine' });
+        }
+    });
+});
+
 app.post('/api/ai-chat', async (req, res) => {
     const { prompt, model = 'biomistral' } = req.body;
 
