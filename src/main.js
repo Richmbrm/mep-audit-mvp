@@ -178,11 +178,6 @@ runBtn.addEventListener('click', async () => {
 
 // Dropzone logic removed as per design update
 
-const DOMAIN_KEYWORDS = [
-  'MEP', 'HVAC', 'Cleanroom', 'ISO 14644', 'Standard', 'Airlock', 'HEPA', 'ACH',
-  'Pressure', 'Ventilation', 'Plumbing', 'Electrical', 'ASHRAE', 'Engineering',
-  'Safety', 'Filter', 'Clean room', 'Laminar', 'Air change', 'Particle'
-];
 
 // LLM Integration Functions
 async function checkLLMStatus() {
@@ -264,54 +259,7 @@ function displayFocusedInsight(res) {
   `;
   aiExpert.classList.remove('hidden');
 }
-async function performWikipediaSearch(query) {
-  try {
-    // Attempt 1: Context Anchored Search
-    let searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`;
-    let response = await fetch(searchUrl);
 
-    // If exact match fails, try adding " (HVAC)" for context
-    if (!response.ok) {
-      searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent((query + ' (HVAC)').replace(/ /g, '_'))}`;
-      response = await fetch(searchUrl);
-    }
-
-    if (!response.ok) return null;
-    const data = await response.json();
-
-    // Context Guard: Check if the extract is relevant to our domain
-    const isRelevant = DOMAIN_KEYWORDS.some(kw =>
-      data.extract.toLowerCase().includes(kw.toLowerCase()) ||
-      data.title.toLowerCase().includes(kw.toLowerCase())
-    );
-
-    if (!isRelevant) {
-      console.warn(`Wikipedia result for "${query}" filtered out by Domain Guard.`);
-      return null;
-    }
-
-    return {
-      title: data.title,
-      extract: data.extract,
-      url: data.content_urls.desktop.page
-    };
-  } catch (e) {
-    return null;
-  }
-}
-
-function generateExternalLinks(query) {
-  return `
-    <div class="external-search-links" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--color-border);">
-      <p style="font-size: 0.75rem; color: var(--color-text-dim); margin-bottom: 0.5rem;">Deep search on industry sites:</p>
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <a href="https://www.hse.gov.uk/search/results.htm?q=${encodeURIComponent(query)}" target="_blank" class="external-link-tag">HSE.gov.uk</a>
-        <a href="https://www.iso.org/search.html?q=${encodeURIComponent(query)}" target="_blank" class="external-link-tag">ISO.org</a>
-        <a href="https://www.google.com/search?q=site:ashrae.org+${encodeURIComponent(query)}" target="_blank" class="external-link-tag">ASHRAE</a>
-      </div>
-    </div>
-  `;
-}
 
 async function performSearch(query) {
   if (!query) {
@@ -344,20 +292,7 @@ async function performSearch(query) {
     `).join('');
   }
 
-  // --- TIER 2: WIKIPEDIA (IF NEEDED OR FOR BROAD TERMS) ---
-  if (results.length < 3) {
-    const wiki = await performWikipediaSearch(query);
-    if (wiki) {
-      html += `
-        <div class="result-item wiki-result" style="border-left-color: #72777d;">
-          <span class="insight-tag">🛡️ DOMAIN GUARDED (WIKIPEDIA)</span>
-          <p style="font-weight: 600; margin-bottom: 0.25rem;">${wiki.title}</p>
-          <p style="font-size: 0.875rem; color: var(--color-text-dim)">${wiki.extract.substring(0, 150)}...</p>
-          <a href="${wiki.url}" target="_blank" style="font-size: 0.75rem; color: var(--color-primary)">Read full article</a>
-        </div>
-      `;
-    }
-  }
+
 
   // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
   if (llmStatus.classList.contains('online')) {
@@ -376,8 +311,7 @@ async function performSearch(query) {
     }
   }
 
-  // --- TIER 4: EXTERNAL DEEP LINKS ---
-  html += generateExternalLinks(query);
+
 
   if (html) {
     searchResults.innerHTML = html;
