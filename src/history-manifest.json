@@ -1,5 +1,12 @@
 [
   {
+    "hash": "10605d12819e30eed5a736a925d9792485316520",
+    "author": "Richmbrm",
+    "date": "2025-12-31",
+    "message": "Enable local RAG: Regulatory manual ingestion active",
+    "aiSummary": "\"Enabled local RAG regulatory manual ingestion.\""
+  },
+  {
     "hash": "bbc9e256c2d429fcc8ea97ce647796fb901e6975",
     "author": "Richmbrm",
     "date": "2025-12-31",
@@ -341,12 +348,5 @@
     "date": "2025-12-27",
     "message": "Final cloud-hosting compatibility fixes",
     "aiSummary": "\"Resolved final cloud-hosting compatibility issues.\""
-  },
-  {
-    "hash": "abde2bb54831f8a6853c7373b1eaa2475562a747",
-    "author": "Richmbrm",
-    "date": "2025-12-27",
-    "message": "Initial MVP Release - MEP Audit System",
-    "aiSummary": "\"Released Initial MVP version of the Multi-Employer Platform (MEP) Audit System.\""
   }
 ]
