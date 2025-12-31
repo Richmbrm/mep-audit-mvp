@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { Agent } from 'undici'; // For timeout control
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -113,6 +114,12 @@ app.post('/api/rag-query', (req, res) => {
     });
 });
 
+// Endpoint for Ollama LLM integration
+const ollamaAgent = new Agent({
+    headersTimeout: 300000, // 5 minutes for slow model loading
+    bodyTimeout: 300000     // 5 minutes for long generation
+});
+
 app.post('/api/ai-chat', async (req, res) => {
     const { prompt, model = 'biomistral' } = req.body;
 
@@ -120,6 +127,7 @@ app.post('/api/ai-chat', async (req, res) => {
         const response = await fetch('http://127.0.0.1:11434/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            dispatcher: ollamaAgent,
             body: JSON.stringify({
                 model: model,
                 prompt: prompt,
