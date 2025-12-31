@@ -206,6 +206,33 @@ body {
     font-size: 0.6rem;
 }
 
+/* AI Summary */
+.ai-summary-box {
+    background: #fdfdfd;
+    border-left: 3px solid var(--jira-blue);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    font-size: 0.85rem;
+}
+
+.ai-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--jira-blue);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.05em;
+}
+
+.ai-summary-text {
+    margin: 0;
+    color: var(--jira-text);
+    font-style: italic;
+    line-height: 1.4;
+}
+
 /* Comments */
 .card-feedback {
     border-top: 1px solid var(--jira-border);

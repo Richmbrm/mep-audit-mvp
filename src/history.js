@@ -39,9 +39,17 @@ function renderHistory(history, comments) {
     commitList.innerHTML = history.map(item => `
         <div class="jira-card" id="card-${item.hash}">
             <div class="card-header">
-                <p class="commit-msg">${item.message}</p>
                 <span class="commit-hash-tag">${item.hash.substring(0, 7)}</span>
+                <p class="commit-msg">${item.message}</p>
             </div>
+            
+            ${item.aiSummary ? `
+            <div class="ai-summary-box">
+                <span class="ai-label">🤖 AI INSIGHT</span>
+                <p class="ai-summary-text">${item.aiSummary}</p>
+            </div>
+            ` : ''}
+
             <div class="card-meta">
                 <div class="author-avatar">${item.author.charAt(0)}</div>
                 <span>${item.author}</span>
@@ -53,10 +61,10 @@ function renderHistory(history, comments) {
             <div class="card-feedback">
                 <textarea 
                     class="comment-input" 
-                    placeholder="Add a comment for this release..."
+                    placeholder="Add a manual release note..."
                     data-hash="${item.hash}">${comments[item.hash] || ''}</textarea>
                 <div class="save-status" id="status-${item.hash}">
-                  <span>✓</span> Changes saved
+                  <span>✓</span> Syncing to CI Manifest...
                 </div>
             </div>
         </div>

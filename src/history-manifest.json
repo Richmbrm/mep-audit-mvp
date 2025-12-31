@@ -1,278 +1,331 @@
 [
   {
+    "hash": "bb674402821214e6f172f7dc48cde7cb8abbcaef",
+    "author": "Richmbrm",
+    "date": "2025-12-31",
+    "message": "Add App Summary page and architecture details",
+    "aiSummary": "Added App Summary page with supporting architecture details."
+  },
+  {
     "hash": "f62593a4529583860f0f7054c0b2f95c4273df59",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Another Synch to see if latest git push is listed in history v3"
+    "message": "Another Synch to see if latest git push is listed in history v3",
+    "aiSummary": "Updated version history to include latest Git push in v3."
   },
   {
     "hash": "0b7274e3ca84c5adb78a8872d8dc1cae6e243fe5",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Another Synch to see if latest git push is listed in history v2"
+    "message": "Another Synch to see if latest git push is listed in history v2",
+    "aiSummary": "Updated synchronization logic to ensure that latest git push event is correctly recorded in the version history."
   },
   {
     "hash": "d656531b65dd4c814da0ae98e3d6a342683ccc2c",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Another Synch to see if latest git push is listed in history"
+    "message": "Another Synch to see if latest git push is listed in history",
+    "aiSummary": "Implemented a sync with Git history to verify inclusion of latest push."
   },
   {
     "hash": "263f2ac00bc27cf77afa64432548d78d31bfeab0",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Silence render gin logs and sync history manifest"
+    "message": "Silence render gin logs and sync history manifest",
+    "aiSummary": "Silenced Gin rendering logs to improve performance and synced the Git history manifest for accurate tracking."
   },
   {
     "hash": "c419c584bc474d28f30324188a038b8234ebae5f",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Updated CI page Repo updates"
+    "message": "Updated CI page Repo updates",
+    "aiSummary": "Upgraded repository information on the CI page to reflect recent repo updates."
   },
   {
     "hash": "d47a88858ab026d648740ed829d115cf5a982186",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Synch Repo 12302151"
+    "message": "Synch Repo 12302151",
+    "aiSummary": "\"Released repository revision 12302151.\""
   },
   {
     "hash": "59234195035a5a2acfd8edad6aaf02d279ad157c",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Update history page branding to CI and sync manifest"
+    "message": "Update history page branding to CI and sync manifest",
+    "aiSummary": "Updated the history page branding to reflect the CI environment and synchronized the manifest accordingly."
   },
   {
     "hash": "f171bc89c630dc4afc041eb0281e2338e054c698",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "2nd Sync latest release history and comments to Render"
+    "message": "2nd Sync latest release history and comments to Render",
+    "aiSummary": "Render updated with latest release history and comments from Git commit."
   },
   {
     "hash": "8fb69a420ce169bac9777afb3d21f4b311d9f5f4",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Sync latest release history and comments to Render"
+    "message": "Sync latest release history and comments to Render",
+    "aiSummary": "Updated Render with the latest release history and corresponding comments."
   },
   {
     "hash": "21ddb3648d923ed566324e4941d828b8a32129b3",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Freeze full local history manifest for Render deployment"
+    "message": "Freeze full local history manifest for Render deployment",
+    "aiSummary": "Render deployment now includes full local history manifest frozen at the time of deployment."
   },
   {
     "hash": "5588bf5c29a3cbe1f168986d23d01cb5da689896",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Deploy bulletproof build-time history manifest for Render"
+    "message": "Deploy bulletproof build-time history manifest for Render",
+    "aiSummary": "Updated Render with a bulletproof build-time history manifest to improve deployment reliability and integrity."
   },
   {
     "hash": "595894f057ff828934cb23113adff9017e1600e3",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Robust git-history fix for Render production"
+    "message": "Robust git-history fix for Render production",
+    "aiSummary": "Improved render production environment with a robust fix to the git history functionality."
   },
   {
     "hash": "c97fb1130fa4451031fbbd836b8baa9b83d1ea7e",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Fix shallow clone history on Render"
+    "message": "Fix shallow clone history on Render",
+    "aiSummary": "Fixed shallow clone issue to improve rendering performance."
   },
   {
     "hash": "3d4125e9c0c3fbb8484923e72924d142f8480938",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Implement Jira-style Release History with persistent comments"
+    "message": "Implement Jira-style Release History with persistent comments",
+    "aiSummary": "Released a new feature to display a persistent release history with comments in the repository."
   },
   {
     "hash": "7aa2b94d8495e04086bc47c10f44adaf4d7df231",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Fix BioMistral model identifier mismatch"
+    "message": "Fix BioMistral model identifier mismatch",
+    "aiSummary": "Fixed a bug causing inconsistent BioMistral model identifiers in the system."
   },
   {
     "hash": "6cbe42f98d3a93358ca8a8198258e70d9a9efdd8",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Optimize AI search performance and fix result click crash"
+    "message": "Optimize AI search performance and fix result click crash",
+    "aiSummary": "\"Performance optimization and bug fixes to improve AI search functionality.\""
   },
   {
     "hash": "b3a21059813c084478381be77fb20c207509803d",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Update walkthrough with connectivity warnings for local LLMs"
+    "message": "Update walkthrough with connectivity warnings for local LLMs",
+    "aiSummary": "Updated walkthrough to include connectivity warnings for local Large Language Models (LLMs)."
   },
   {
     "hash": "2d130ed21b922b9ff9b254227055a94ff56bacb4",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Add LLM validation logging and update walkthrough"
+    "message": "Add LLM validation logging and update walkthrough",
+    "aiSummary": "Implemented LLam validation logging and updated walkthrough features for improved functionality."
   },
   {
     "hash": "a6182595da7b2c660e15f41aedaa92fc0aaf9a4a",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Integrate Local Ollama LLMs (BioMistral & Llama 3.2)"
+    "message": "Integrate Local Ollama LLMs (BioMistral & Llama 3.2)",
+    "aiSummary": "Integrated Local Ollama Large Language Models (BioMistral and Llama 3.2) into the system."
   },
   {
     "hash": "2c3872b323a93d829443242304aab3cb0ab4415d",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Update README with BETA access and description"
+    "message": "Update README with BETA access and description",
+    "aiSummary": "Updated the README to include beta access information and detailed description."
   },
   {
     "hash": "6e97994e3b3cf51a8ab63567d0ea9b2f6aecf1e2",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Add BETA MVP Banner v1.5"
+    "message": "Add BETA MVP Banner v1.5",
+    "aiSummary": "Added beta MVP banner version 1.5 to the application."
   },
   {
     "hash": "aa3e486d6995fb112586eb925aed1ad05d918e5a",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Implement MEP Domain Guard for AI Search"
+    "message": "Implement MEP Domain Guard for AI Search",
+    "aiSummary": "Implemented MEPCoDomainGuard for enhanced AI search functionality in MEP domain."
   },
   {
     "hash": "3ee7bba56a97718cfa32fe406a07711ef9a15716",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Implement intelligent equipment visibility and local JSON viewing"
+    "message": "Implement intelligent equipment visibility and local JSON viewing",
+    "aiSummary": "Improved user interface with enhanced local content display capabilities."
   },
   {
     "hash": "61d17e04b718c0d31fc34161d0d40a115c80036d",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Add custom validation message and finalize onboarding UI"
+    "message": "Add custom validation message and finalize onboarding UI",
+    "aiSummary": "Added custom validation messages and finalized the onboarding UI as part of key user interface enhancements."
   },
   {
     "hash": "9df40f4bf2d94863263fb0f23d8c376e2bd93cc0",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Replace legacy upload with premium onboarding summary"
+    "message": "Replace legacy upload with premium onboarding summary",
+    "aiSummary": "Improved user experience by replacing the outdated legacy upload process with a modern premium onboarding summary."
   },
   {
     "hash": "4c27de3fa1b8a0e0ad33d74233d80ef7a16f0c2f",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Enforce explicit file selection with placeholder"
+    "message": "Enforce explicit file selection with placeholder",
+    "aiSummary": "Explicit file selection now requires a placeholder to prevent unintended modifications."
   },
   {
     "hash": "1090968f56ebe0698e87e0b3768f25ad1b84db14",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Implement Dual-Method Audit Selection (Server vs Local)"
+    "message": "Implement Dual-Method Audit Selection (Server vs Local)",
+    "aiSummary": "Implemented the ability to select audit methods, allowing users to choose between server-side and local auditing for increased flexibility."
   },
   {
     "hash": "fc60b3237d4aaeda3db07f340853aed3f0bb3b6b",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "UI: Update Run Audit label in index.html"
+    "message": "UI: Update Run Audit label in index.html",
+    "aiSummary": "Updated the 'Run Audit' label in the index.html file to improve user experience."
   },
   {
     "hash": "803fb6d8ca44b7b55eab48115bc19fb9861c2412",
     "author": "Richmbrm",
     "date": "2025-12-30",
-    "message": "Implement Three-Tier AI Knowledge System with Wikipedia integration"
+    "message": "Implement Three-Tier AI Knowledge System with Wikipedia integration",
+    "aiSummary": "\"Added support for three-tier AI knowledge system with integrated Wikipedia resources.\""
   },
   {
     "hash": "27980141348c2d8c83afbb3a01f649834618f314",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Fix AI Insight button mapping for expanded standards DB"
+    "message": "Fix AI Insight button mapping for expanded standards DB",
+    "aiSummary": "Updated button mappings to reflect the expanded standards database in AI Insight functionality."
   },
   {
     "hash": "d7f1821ab0f5e3d420a8c179866803e5ce639f25",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Expand AI Standards database with deep technical MEP data"
+    "message": "Expand AI Standards database with deep technical MEP data",
+    "aiSummary": "Expanded the AI Standards database to include detailed technical MEP (Mechanical, Electrical, and Plumbing) data."
   },
   {
     "hash": "11d976130de31a9d84637eaaf808c54f6a7f06c5",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Fix syntax error in main.js causing build failure"
+    "message": "Fix syntax error in main.js causing build failure",
+    "aiSummary": "Fixed a syntax error in main.js, resulting in a successful rebuild of the application."
   },
   {
     "hash": "fe0a28c1e509cb477d83de1d46a3fa60d8bfffd2",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Make AI search results clickable and interactive"
+    "message": "Make AI search results clickable and interactive",
+    "aiSummary": "Added interactive clickability to AI search results."
   },
   {
     "hash": "9678c024b85689f72517c95f2a70a778b508595e",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Fix AI results clipping and double search widget size"
+    "message": "Fix AI results clipping and double search widget size",
+    "aiSummary": "\"Resolved issues with AI result clipping and improved the layout of the Double Search widget.\""
   },
   {
     "hash": "26ca0e16a2253390020ef2386f2d10f999fdbf0a",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Enhance AI Expert search UI with button and larger input"
+    "message": "Enhance AI Expert search UI with button and larger input",
+    "aiSummary": "Improved the AI Expert search UI by adding a button and enlarging the input field for better user experience."
   },
   {
     "hash": "000c78d1ebdfdf67b24999cd18ce50294ca9eaab",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Consolidate project files into audit-viewer for Render compatibility"
+    "message": "Consolidate project files into audit-viewer for Render compatibility",
+    "aiSummary": "\"Project files consolidated to improve Render compatibility.\""
   },
   {
     "hash": "f49abd0051f4e1aadd6b3f912e270b5586f8ee24",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Add debug logging for file paths"
+    "message": "Add debug logging for file paths",
+    "aiSummary": "Added debug logging to support file path tracing."
   },
   {
     "hash": "61235158439788094d912bf305254637a758d277",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "use regex literal for Express 5 compat"
+    "message": "use regex literal for Express 5 compat",
+    "aiSummary": "Updated regex engine to support latest Express 5 syntax for improved compatibility."
   },
   {
     "hash": "f3d25e3d9850aba5ae8c60f58ed3434cfa092037",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Fix Express 5 wildcard syntax for Render"
+    "message": "Fix Express 5 wildcard syntax for Render",
+    "aiSummary": "Render now supports Express 5 wildcard syntax correctly."
   },
   {
     "hash": "432735e7d59e4a1348aa4346395f4a3b61112efb",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Confirmed fix for Render routing"
+    "message": "Confirmed fix for Render routing",
+    "aiSummary": "Fixed render routing issue in production release."
   },
   {
     "hash": "a67a5e66d7b8f4f261fd628752d41bb5e5263cde",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "fix homepage routing for render deployment"
+    "message": "fix homepage routing for render deployment",
+    "aiSummary": "Fixed homepage routing issues to ensure proper rendering of the home page during a render deployment."
   },
   {
     "hash": "23348c998bc958c0c2a2039ce7c8515f2aa4fe2e",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Allow dynamic API URL for cloud hosting"
+    "message": "Allow dynamic API URL for cloud hosting",
+    "aiSummary": "\"We have added support for dynamically generating API URLs in cloud-hosted environments.\""
   },
   {
     "hash": "b6eb8bccdb51fa28fbaf1a65ebdf8b373898fc26",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Update project title to include 'MVP'"
+    "message": "Update project title to include 'MVP'",
+    "aiSummary": "Updated project title to reflect its Minimum Viable Product (MVP) development stage."
   },
   {
     "hash": "39798fc275be13a08ecda3b617bc4c03e0349e09",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Add project title and description to README"
+    "message": "Add project title and description to README",
+    "aiSummary": "Added essential metadata to the project's README for improved discoverability and onboarding."
   },
   {
     "hash": "f56b4405033a9b1d2e4009664179309adf5cc8ba",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Final cloud-hosting compatibility fixes"
+    "message": "Final cloud-hosting compatibility fixes",
+    "aiSummary": "\"Resolved final cloud-hosting compatibility issues.\""
   },
   {
     "hash": "abde2bb54831f8a6853c7373b1eaa2475562a747",
     "author": "Richmbrm",
     "date": "2025-12-27",
-    "message": "Initial MVP Release - MEP Audit System"
+    "message": "Initial MVP Release - MEP Audit System",
+    "aiSummary": "\"Released Initial MVP version of the Multi-Employer Platform (MEP) Audit System.\""
   }
 ]
