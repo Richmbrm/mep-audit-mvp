@@ -11,12 +11,18 @@ async function initHistory() {
         // Primary: Use Build-time Manifest (Bulletproof for Cloud)
         let history = historyManifest || [];
 
-        // Secondary: Try to fetch live (for local dev updates without rebuild)
+        // Secondary: Merge with live history (to show newest commits while preserving AI summaries)
         try {
             const liveRes = await fetch(`${API_BASE}/git-history`);
             if (liveRes.ok) {
                 const liveHistory = await liveRes.json();
-                if (liveHistory.length > history.length) history = liveHistory;
+                const manifestMap = new Map(history.map(c => [c.hash, c]));
+
+                // Merge: Use live history as structure, but pull AI summaries from manifest
+                history = liveHistory.map(commit => {
+                    const cached = manifestMap.get(commit.hash);
+                    return { ...commit, aiSummary: cached ? cached.aiSummary : null };
+                });
             }
         } catch (e) { console.warn('Live history fetch failed, falling back to manifest'); }
 

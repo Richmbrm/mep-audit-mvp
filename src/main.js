@@ -232,10 +232,30 @@ async function performLLMReasoning(query) {
   }
 }
 
+// Global copy helper for AI results
+window.copyToClipboard = async (text, btn) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '✅ Copied!';
+    btn.classList.add('success');
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('success');
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy/export:', err);
+  }
+};
+
 function displayFocusedInsight(res) {
+  const escapedValue = res.value.replace(/'/g, "\\'").replace(/"/g, '&quot;');
   aiExpertContent.innerHTML = `
-    <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary);">
-      <span class="insight-tag">${res.path}</span>
+    <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary); position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+        <span class="insight-tag">${res.path}</span>
+        <button onclick="copyToClipboard('${escapedValue}', this)" class="mini-copy-btn">📋 Copy</button>
+      </div>
       <p style="font-size: 1.125rem; line-height: 1.6; margin: 0.5rem 0;">${res.value}</p>
       <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-dim);">
         💡 Selected from Standards Database
@@ -343,10 +363,14 @@ async function performSearch(query) {
   if (llmStatus.classList.contains('online')) {
     const reasoning = await performLLMReasoning(query);
     if (reasoning) {
+      const escapedReasoning = reasoning.replace(/'/g, "\\'").replace(/"/g, '&quot;');
       html += `
-        <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); margin-bottom: 0.5rem; border-radius: 0.5rem; padding: 1rem;">
-          <span class="insight-tag">🌟 DEEP REASONING (${llmModelSelect.value.toUpperCase()})</span>
-          <p style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
+        <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); margin-bottom: 0.5rem; border-radius: 0.5rem; padding: 1rem; position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <span class="insight-tag">🌟 LOCAL ENGINEERING LLM (${llmModelSelect.value.toUpperCase()})</span>
+            <button onclick="copyToClipboard('${escapedReasoning}', this)" class="mini-copy-btn" title="Copy reasoning to clipboard">📋 Copy</button>
+          </div>
+          <p class="llm-reasoning-text" style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
         </div>
       `;
     }
@@ -416,9 +440,14 @@ function showInsight(type) {
   if (!insight) return;
 
   aiExpert.classList.remove('hidden');
+  const fullText = `Expert Analysis: ${insight.Cause}\nRecommendation: ${insight.Action}`;
+  const escapedText = fullText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
   aiExpertContent.innerHTML = `
-    <div class="insight-card animate-in" style="border-left: 4px solid #ef4444;">
-      <span class="insight-tag">Compliance Insight: ${type.replace(/_/g, ' ')}</span>
+    <div class="insight-card animate-in" style="border-left: 4px solid #ef4444; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+        <span class="insight-tag">Compliance Insight: ${type.replace(/_/g, ' ')}</span>
+        <button onclick="copyToClipboard('${escapedText}', this)" class="mini-copy-btn">📋 Copy</button>
+      </div>
       <p><strong>Engineering Analysis:</strong> ${insight.Cause}</p>
       <p style="color: var(--color-success); font-size: 0.875rem; margin-top: 1rem;"><strong>Expert Recommendation:</strong> ${insight.Action}</p>
     </div>

@@ -707,3 +707,30 @@ tr:hover td {
   filter: brightness(1.2);
   transform: translateY(-1px);
 }
+
+/* Mini Copy Button for AI Insights */
+.mini-copy-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mini-copy-btn:hover {
+  background: var(--color-glass);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.mini-copy-btn.success {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}

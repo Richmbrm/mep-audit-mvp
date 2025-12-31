@@ -1,5 +1,6 @@
 {
   "59234195035a5a2acfd8edad6aaf02d279ad157c": "Updated page to move away from Jira heading, thought this was bordering on copyright infringement :)\nTesting this update on local host first, should reach render once have pushed to workflow",
   "d656531b65dd4c814da0ae98e3d6a342683ccc2c": "Test add text to a push notes",
-  "0b7274e3ca84c5adb78a8872d8dc1cae6e243fe5": "Test add text to a push notes"
+  "0b7274e3ca84c5adb78a8872d8dc1cae6e243fe5": "Test add text to a push notes",
+  "a3a9690151d3496ad700921165f5a68f954c24e8": "Asked Antigravity to make sure AI insights are seen on local host version too. Let's see on next git push"
 }
