@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Management & Maintenance | MEP Audit System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/management.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="beta-banner">
+            <span class="beta-tag">ADMIN</span>
+            <span class="version-tag">SYSTEM MAINTENANCE</span>
+            <span class="banner-msg">Regulatory Library & Index Management</span>
+        </div>
+
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+            <div style="text-align: left;">
+                <h1>System Management</h1>
+                <p style="color: var(--color-text-dim); display: flex; align-items: center; gap: 1rem;">
+                    Maintenance Dashboard for Regulatory Assets
+                    <a href="index.html"
+                        style="font-size: 0.7rem; color: var(--color-primary); text-decoration: none; border: 1px solid var(--color-primary); padding: 0.1rem 0.6rem; border-radius: 4px; font-weight: 600; text-transform: uppercase;">Dashboard</a>
+                    <a href="about.html"
+                        style="font-size: 0.7rem; color: #fff; text-decoration: none; border: 1px solid #fff; padding: 0.1rem 0.6rem; border-radius: 4px; font-weight: 600; text-transform: uppercase; opacity: 0.5;">App
+                        Summary</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="management-grid">
+            <!-- Regulatory Indexing Control -->
+            <section class="management-card animate-in" style="border-left: 4px solid var(--color-warning);">
+                <div class="card-header">
+                    <h2>Regulatory Vector Vault</h2>
+                    <span class="status-badge" id="indexingStatus">Ready</span>
+                </div>
+                <p class="card-desc">Trigger a full rebuild of the local vector database. This is required whenever you
+                    add new manuals to the <code>manuals/</code> folder.</p>
+
+                <div class="manual-list-container">
+                    <h3>Current Library (PDFs)</h3>
+                    <ul id="manualList" class="manual-list">
+                        <!-- Populated by JS -->
+                        <li style="color: var(--color-text-dim); opacity: 0.5;">Scanning library...</li>
+                    </ul>
+                </div>
+
+                <div class="action-zone">
+                    <button id="reindexBtn" class="primary-btn pulse-on-hover">🚀 Rebuild Regulatory Index</button>
+                    <p class="tiny-note">This process runs the local <code>ingest_manuals.py</code> engine. It may take
+                        1-2 minutes depending on library size.</p>
+                </div>
+
+                <div id="reindexLog" class="reindex-log hidden">
+                    <pre id="logContent"></pre>
+                </div>
+            </section>
+
+            <!-- Feedback & Intelligence Stats -->
+            <section class="management-card animate-in"
+                style="border-left: 4px solid var(--color-success); opacity: 0.8;">
+                <div class="card-header">
+                    <h2>Intelligence Metrics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-val" id="totalFeedback">--</span>
+                        <span class="stat-label">Verified Insights</span>
+                    </div>
+                </div>
+                <p class="card-desc" style="margin-top: 1rem;">The system is currently utilizing few-shot prompting to
+                    reinforce engineering tone based on your stored feedback.</p>
+            </section>
+        </main>
+
+        <footer
+            style="margin-top: 4rem; text-align: center; border-top: 1px solid var(--color-border); padding-top: 2rem; opacity: 0.4;">
+            <p style="font-size: 0.8rem;">MEP Audit System Admin Dashboard • Strictly Local Hardware</p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/management.js"></script>
+</body>
+
+</html>

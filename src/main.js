@@ -203,7 +203,7 @@ async function checkLLMStatus() {
 checkLLMStatus();
 llmModelSelect.addEventListener('change', checkLLMStatus);
 
-async function performLLMReasoning(query) {
+async function performLLMReasoning(query, ragContext = null) {
   const model = llmModelSelect.value;
   let systemPrompt = "You are a professional MEP and ISO 14644 Compliance Engineer. Your goal is to provide deep technical reasoning for audit results. Be concise and technical.";
 
@@ -211,12 +211,23 @@ async function performLLMReasoning(query) {
     systemPrompt += " Use your scientific and cleanroom expertise to provide highly detailed filtration and contamination control insights.";
   }
 
+  // --- AUGMENTATION: Inject RAG Context ---
+  let augmentedPrompt = `${systemPrompt}\n\n`;
+  if (ragContext && ragContext.length > 0) {
+    augmentedPrompt += "CONTEXT FROM REGULATORY MANUALS (FDA, WHO, EU GMP):\n";
+    ragContext.forEach(res => {
+      augmentedPrompt += `[Source: ${res.source}, Page: ${res.page}] Content: ${res.content}\n\n`;
+    });
+    augmentedPrompt += "Use the above regulatory evidence to inform your reasoning. If the context is relevant, cite the specific manual and page.\n\n";
+  }
+  augmentedPrompt += `Question: ${query}`;
+
   try {
     const res = await fetch(`${API_BASE}/ai-chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        prompt: `${systemPrompt}\n\nQuestion: ${query}`,
+        prompt: augmentedPrompt,
         model: model
       })
     });
@@ -243,6 +254,33 @@ window.copyToClipboard = async (text, btn) => {
   }
 };
 
+// Global feedback submitter
+window.submitFeedback = async (query, response, isUseful, btn) => {
+  try {
+    const res = await fetch(`${API_BASE}/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, response, isUseful })
+    });
+
+    if (res.ok) {
+      const container = btn.closest('.feedback-container');
+      const allBtns = container.querySelectorAll('.feedback-btn');
+      allBtns.forEach(b => b.classList.add('hidden'));
+
+      const msg = document.createElement('span');
+      msg.className = 'animate-in';
+      msg.style.fontSize = '0.75rem';
+      msg.style.color = isUseful ? 'var(--color-success)' : '#ef4444';
+      msg.style.fontWeight = '700';
+      msg.innerHTML = isUseful ? '✅ Engineering Insight Verified' : '❌ Technical Pitfall Noted';
+      container.appendChild(msg);
+    }
+  } catch (err) {
+    console.error('Feedback Submit Error:', err);
+  }
+};
+
 function displayFocusedInsight(res) {
   const escapedValue = res.value.replace(/'/g, "\\'").replace(/"/g, '&quot;');
   aiExpertContent.innerHTML = `
@@ -252,6 +290,12 @@ function displayFocusedInsight(res) {
         <button onclick="copyToClipboard('${escapedValue}', this)" class="mini-copy-btn">📋 Copy</button>
       </div>
       <p style="font-size: 1.125rem; line-height: 1.6; margin: 0.5rem 0;">${res.value}</p>
+      
+      <div class="feedback-container">
+        <button onclick="submitFeedback('${res.path}', '${escapedValue}', true, this)" class="feedback-btn">👍 Useful</button>
+        <button onclick="submitFeedback('${res.path}', '${escapedValue}', false, this)" class="feedback-btn">👎 Not Useful</button>
+      </div>
+
       <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-dim);">
         💡 Selected from Standards Database
       </div>
@@ -310,7 +354,8 @@ async function performSearch(query) {
 
   // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
   if (llmStatus.classList.contains('online')) {
-    const reasoning = await performLLMReasoning(query);
+    // Pass the RAG results directly into the LLM reasoning function for "Augmentation"
+    const reasoning = await performLLMReasoning(query, ragResults);
     if (reasoning) {
       const escapedReasoning = reasoning.replace(/'/g, "\\'").replace(/"/g, '&quot;');
       html += `
@@ -320,6 +365,11 @@ async function performSearch(query) {
             <button onclick="copyToClipboard('${escapedReasoning}', this)" class="mini-copy-btn" title="Copy reasoning to clipboard">📋 Copy</button>
           </div>
           <p class="llm-reasoning-text" style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
+          
+          <div class="feedback-container">
+            <button onclick="submitFeedback('${query.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedReasoning}', true, this)" class="feedback-btn">👍 Useful</button>
+            <button onclick="submitFeedback('${query.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedReasoning}', false, this)" class="feedback-btn">👎 Not Useful</button>
+          </div>
         </div>
       `;
     }
@@ -412,6 +462,11 @@ function showInsight(type) {
       </div>
       <p><strong>Engineering Analysis:</strong> ${insight.Cause}</p>
       <p style="color: var(--color-success); font-size: 0.875rem; margin-top: 1rem;"><strong>Expert Recommendation:</strong> ${insight.Action}</p>
+      
+      <div class="feedback-container">
+        <button onclick="submitFeedback('${type.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedText}', true, this)" class="feedback-btn">👍 Useful</button>
+        <button onclick="submitFeedback('${type.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedText}', false, this)" class="feedback-btn">👎 Not Useful</button>
+      </div>
     </div>
   `;
   aiExpert.scrollIntoView({ behavior: 'smooth' });

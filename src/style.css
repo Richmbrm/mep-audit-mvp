@@ -734,3 +734,49 @@ tr:hover td {
   border-color: var(--color-success);
   color: #fff;
 }
+
+/* Feedback Buttons for AI Insights */
+.feedback-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.feedback-btn {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.feedback-btn:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.feedback-btn.active-useful {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.feedback-btn.active-not-useful {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.feedback-btn.hidden {
+  display: none;
+}

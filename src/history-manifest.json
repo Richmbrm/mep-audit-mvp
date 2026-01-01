@@ -1,5 +1,19 @@
 [
   {
+    "hash": "929e9087f750e83436386926296c336b1a008e2b",
+    "author": "Richmbrm",
+    "date": "2025-12-31",
+    "message": "Fix Ollama connection timeouts in server backend",
+    "aiSummary": "Improved server backend reliability by resolving Ollama connection timeouts."
+  },
+  {
+    "hash": "cc99965c605cf5a25fbc43152b00eb55d08992e6",
+    "author": "Richmbrm",
+    "date": "2025-12-31",
+    "message": "Update after about.html changes",
+    "aiSummary": "Updated \"about\" page to reflect recent changes."
+  },
+  {
     "hash": "10605d12819e30eed5a736a925d9792485316520",
     "author": "Richmbrm",
     "date": "2025-12-31",
@@ -334,19 +348,5 @@
     "date": "2025-12-27",
     "message": "Update project title to include 'MVP'",
     "aiSummary": "Updated project title to reflect its Minimum Viable Product (MVP) development stage."
-  },
-  {
-    "hash": "39798fc275be13a08ecda3b617bc4c03e0349e09",
-    "author": "Richmbrm",
-    "date": "2025-12-27",
-    "message": "Add project title and description to README",
-    "aiSummary": "Added essential metadata to the project's README for improved discoverability and onboarding."
-  },
-  {
-    "hash": "f56b4405033a9b1d2e4009664179309adf5cc8ba",
-    "author": "Richmbrm",
-    "date": "2025-12-27",
-    "message": "Final cloud-hosting compatibility fixes",
-    "aiSummary": "\"Resolved final cloud-hosting compatibility issues.\""
   }
 ]

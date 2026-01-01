@@ -64,7 +64,11 @@
         <header style="margin-bottom: 2rem;">
             <a href="index.html" class="back-link">← Back to Dashboard</a>
             <h1>App Architecture & Data Flow</h1>
-            <p style="color: var(--color-text-dim)">Technical summary of the MEP Audit Viewer infrastructure</p>
+            <p style="color: var(--color-text-dim); display: flex; align-items: center; gap: 1rem;">
+                Technical summary of the MEP Audit Viewer infrastructure
+                <a href="management.html"
+                    style="font-size: 0.7rem; color: var(--color-warning); text-decoration: none; border: 1px solid var(--color-warning); padding: 0.1rem 0.6rem; border-radius: 4px; font-weight: 600; text-transform: uppercase;">Management</a>
+            </p>
         </header>
 
         <main>
@@ -107,7 +111,8 @@
                         <h3>🔬 Vector Infrastructure</h3>
                         <p style="font-size: 0.9rem; color: var(--color-text-dim);">
                             <strong>ChromaDB:</strong> A high-performance local vector store used to index 591 technical
-                            snippets from PDF manuals.<br><br>
+                            snippets from <strong>FDA</strong>, <strong>EU GMP</strong>, and <strong>WHO TRS
+                                961</strong> manuals.<br><br>
                             <strong>Nomic-Embed-Text:</strong> The local embedding model that converts technical text
                             into searchable multidimensional vectors.
                         </p>

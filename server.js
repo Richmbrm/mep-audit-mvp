@@ -4,7 +4,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { Agent } from 'undici'; // For timeout control
+import { Agent, request } from 'undici'; // Use low-level request
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const PROJECT_ROOT = __dirname;
 const COMMENTS_FILE = path.join(PROJECT_ROOT, 'src', 'comments.json');
+const FEEDBACK_FILE = path.join(PROJECT_ROOT, 'src', 'feedback.json');
 
 app.use(cors());
 app.use(express.json());
@@ -87,6 +88,69 @@ app.post('/api/run-audit', (req, res) => {
 });
 
 // Endpoint for Ollama LLM integration
+// Endpoint to capture user feedback on AI insights
+app.post('/api/feedback', (req, res) => {
+    const { query, response, isUseful } = req.body;
+
+    try {
+        let feedback = [];
+        if (fs.existsSync(FEEDBACK_FILE)) {
+            feedback = JSON.parse(fs.readFileSync(FEEDBACK_FILE, 'utf8'));
+        }
+
+        feedback.push({
+            query,
+            response,
+            status: isUseful ? 'useful' : 'not_useful',
+            date: new Date().toISOString()
+        });
+
+        fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Feedback error:', err);
+        res.status(500).json({ error: 'Failed to save feedback' });
+    }
+});
+
+// Endpoint to fetch all feedback (for admin stats)
+app.get('/api/feedback', (req, res) => {
+    if (!fs.existsSync(FEEDBACK_FILE)) return res.json([]);
+    try {
+        const data = fs.readFileSync(FEEDBACK_FILE, 'utf8');
+        res.json(JSON.parse(data));
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to read feedback' });
+    }
+});
+
+// Endpoint to list regulatory manuals
+app.get('/api/admin/manuals', (req, res) => {
+    const manualsDir = path.join(PROJECT_ROOT, 'manuals');
+    if (!fs.existsSync(manualsDir)) return res.json([]);
+
+    fs.readdir(manualsDir, (err, files) => {
+        if (err) return res.status(500).json({ error: 'Failed to read manuals directory' });
+        const pdfs = files.filter(f => f.toLowerCase().endsWith('.pdf'));
+        res.json(pdfs);
+    });
+});
+
+// Endpoint to trigger RAG re-indexing
+app.post('/api/admin/reindex', (req, res) => {
+    console.log('RAG Re-indexing Triggered');
+    const cmd = `python3 ingest_manuals.py`;
+
+    exec(cmd, { cwd: PROJECT_ROOT }, (error, stdout, stderr) => {
+        if (error) {
+            console.error('Re-index Error:', stderr || error.message);
+            return res.status(500).json({ error: 'Re-indexing failed', details: stderr });
+        }
+        console.log('Re-index Success:', stdout);
+        res.json({ success: true, message: 'Vector database rebuilt successfully', log: stdout });
+    });
+});
+
 // Endpoint to query the local RAG Vector Database
 app.post('/api/rag-query', (req, res) => {
     const { query } = req.body;
@@ -124,22 +188,43 @@ app.post('/api/ai-chat', async (req, res) => {
     const { prompt, model = 'biomistral' } = req.body;
 
     try {
-        const response = await fetch('http://127.0.0.1:11434/api/generate', {
+        console.log(`AI Chat Request: model=${model}`);
+
+        // --- FEW-SHOT REINFORCEMENT ---
+        let contextPrefix = "";
+        try {
+            if (fs.existsSync(FEEDBACK_FILE)) {
+                const feedbackData = JSON.parse(fs.readFileSync(FEEDBACK_FILE, 'utf8'));
+                const usefulItems = feedbackData.filter(f => f.status === 'useful').slice(-3);
+                if (usefulItems.length > 0) {
+                    contextPrefix = "Reference these previously verified high-quality engineering insights for tone and technical depth:\n\n";
+                    usefulItems.forEach(item => {
+                        contextPrefix += `Query: ${item.query}\nCorrect Response: ${item.response}\n\n`;
+                    });
+                    contextPrefix += "Current Query to answer with similar engineering precision:\n";
+                }
+            }
+        } catch (e) {
+            console.error("Reinforcement context error:", e.message);
+        }
+
+        const { statusCode, body, headers } = await request('http://127.0.0.1:11434/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             dispatcher: ollamaAgent,
             body: JSON.stringify({
                 model: model,
-                prompt: prompt,
+                prompt: contextPrefix + prompt,
                 stream: false
             })
         });
 
-        if (!response.ok) {
-            throw new Error(`Ollama error: ${response.statusText}`);
+        if (statusCode !== 200) {
+            const errText = await body.text();
+            throw new Error(`Ollama error (${statusCode}): ${errText}`);
         }
 
-        const data = await response.json();
+        const data = await body.json();
         res.json({ response: data.response });
     } catch (err) {
         console.error('AI Chat error:', err);
