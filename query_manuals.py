@@ -23,16 +23,20 @@ def query_vector_db(query_text):
         )
 
         # Perform Similarity Search
-        # k=3: Get the top 3 most relevant snippets
-        results = vectorstore.similarity_search(query_text, k=3)
+        # k=6: Get more relevant snippets to provide fuller context
+        results = vectorstore.similarity_search(query_text, k=6)
 
         response = []
+        seen_content = set()
         for doc in results:
-            response.append({
-                "content": doc.page_content,
-                "source": doc.metadata.get("source_manual", "Unknown Source"),
-                "page": doc.metadata.get("page", "N/A")
-            })
+            # Basic deduplication based on content
+            if doc.page_content not in seen_content:
+                response.append({
+                    "content": doc.page_content,
+                    "source": doc.metadata.get("source_manual", "Unknown Source"),
+                    "page": doc.metadata.get("page", "N/A")
+                })
+                seen_content.add(doc.page_content)
 
         return {"results": response}
 

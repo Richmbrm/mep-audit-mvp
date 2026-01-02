@@ -53,6 +53,17 @@ function debounce(func, timeout = 300) {
   };
 }
 
+// Utility: Safe Escape for HTML attributes and JS strings
+const safeEscape = (str) => {
+  if (!str) return '';
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '&quot;')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r');
+};
+
 // Reset Functionality
 resetBtn.addEventListener('click', () => {
   // Hide sections
@@ -241,7 +252,13 @@ async function performLLMReasoning(query, ragContext = null) {
 // Global copy helper for AI results
 window.copyToClipboard = async (text, btn) => {
   try {
-    await navigator.clipboard.writeText(text);
+    // Use the modern API if available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      throw new Error('Clipboard API unavailable');
+    }
+
     const originalText = btn.innerHTML;
     btn.innerHTML = '✅ Copied!';
     btn.classList.add('success');
@@ -250,7 +267,28 @@ window.copyToClipboard = async (text, btn) => {
       btn.classList.remove('success');
     }, 2000);
   } catch (err) {
-    console.error('Failed to copy/export:', err);
+    // Fallback for non-HTTPS or incompatible browsers
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      // Ensure it's not visible but still part of the DOM
+      textArea.style.position = "fixed";
+      textArea.style.left = "-9999px";
+      textArea.style.top = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '✅ Copied!';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2000);
+    } catch (fallbackErr) {
+      console.error('Failed to copy/export:', fallbackErr);
+    }
   }
 };
 
@@ -282,7 +320,7 @@ window.submitFeedback = async (query, response, isUseful, btn) => {
 };
 
 function displayFocusedInsight(res) {
-  const escapedValue = res.value.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  const escapedValue = safeEscape(res.value);
   aiExpertContent.innerHTML = `
     <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary); position: relative;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
@@ -292,8 +330,8 @@ function displayFocusedInsight(res) {
       <p style="font-size: 1.125rem; line-height: 1.6; margin: 0.5rem 0;">${res.value}</p>
       
       <div class="feedback-container">
-        <button onclick="submitFeedback('${res.path}', '${escapedValue}', true, this)" class="feedback-btn">👍 Useful</button>
-        <button onclick="submitFeedback('${res.path}', '${escapedValue}', false, this)" class="feedback-btn">👎 Not Useful</button>
+        <button onclick="submitFeedback('${safeEscape(res.path)}', '${escapedValue}', true, this)" class="feedback-btn">👍 Useful</button>
+        <button onclick="submitFeedback('${safeEscape(res.path)}', '${escapedValue}', false, this)" class="feedback-btn">👎 Not Useful</button>
       </div>
 
       <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-dim);">
@@ -343,21 +381,20 @@ async function performSearch(query) {
       <div class="result-item" style="border-left: 4px solid var(--color-warning); background: rgba(245, 158, 11, 0.05);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
           <span class="insight-tag">📜 REGULATORY EVIDENCE: ${res.source}</span>
-          <button onclick="copyToClipboard('${res.content.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', this)" class="mini-copy-btn">📋 Copy</button>
+          <button onclick="copyToClipboard('${safeEscape(res.content)}', this)" class="mini-copy-btn">📋 Copy</button>
         </div>
         <p style="font-size: 0.875rem; color: var(--color-text); line-height: 1.5;">"${res.content.substring(0, 300)}..."</p>
       </div>
     `).join('');
   }
 
-
-
   // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
   if (llmStatus.classList.contains('online')) {
     // Pass the RAG results directly into the LLM reasoning function for "Augmentation"
     const reasoning = await performLLMReasoning(query, ragResults);
     if (reasoning) {
-      const escapedReasoning = reasoning.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const escapedReasoning = safeEscape(reasoning);
+      const escapedQuery = safeEscape(query);
       html += `
         <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); margin-bottom: 0.5rem; border-radius: 0.5rem; padding: 1rem; position: relative;">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
@@ -367,8 +404,8 @@ async function performSearch(query) {
           <p class="llm-reasoning-text" style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
           
           <div class="feedback-container">
-            <button onclick="submitFeedback('${query.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedReasoning}', true, this)" class="feedback-btn">👍 Useful</button>
-            <button onclick="submitFeedback('${query.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedReasoning}', false, this)" class="feedback-btn">👎 Not Useful</button>
+            <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', true, this)" class="feedback-btn">👍 Useful</button>
+            <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', false, this)" class="feedback-btn">👎 Not Useful</button>
           </div>
         </div>
       `;
@@ -453,7 +490,9 @@ function showInsight(type) {
 
   aiExpert.classList.remove('hidden');
   const fullText = `Expert Analysis: ${insight.Cause}\nRecommendation: ${insight.Action}`;
-  const escapedText = fullText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  const escapedText = safeEscape(fullText);
+  const escapedType = safeEscape(type);
+
   aiExpertContent.innerHTML = `
     <div class="insight-card animate-in" style="border-left: 4px solid #ef4444; position: relative;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
@@ -464,8 +503,8 @@ function showInsight(type) {
       <p style="color: var(--color-success); font-size: 0.875rem; margin-top: 1rem;"><strong>Expert Recommendation:</strong> ${insight.Action}</p>
       
       <div class="feedback-container">
-        <button onclick="submitFeedback('${type.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedText}', true, this)" class="feedback-btn">👍 Useful</button>
-        <button onclick="submitFeedback('${type.replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${escapedText}', false, this)" class="feedback-btn">👎 Not Useful</button>
+        <button onclick="submitFeedback('${escapedType}', '${escapedText}', true, this)" class="feedback-btn">👍 Useful</button>
+        <button onclick="submitFeedback('${escapedType}', '${escapedText}', false, this)" class="feedback-btn">👎 Not Useful</button>
       </div>
     </div>
   `;

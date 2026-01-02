@@ -15,22 +15,49 @@ def ingest_pdfs():
         print(f"Error: Directory '{SOURCE_DIRECTORY}' not found.")
         return
 
+    # 1b. Clear existing database to prevent duplicates
+    if os.path.exists(DB_PATH):
+        print(f"Clearing existing database at {DB_PATH}...")
+        import shutil
+        # We remove the contents but keep the directory, or just remove and recreate
+        shutil.rmtree(DB_PATH)
+        os.makedirs(DB_PATH)
+
     # 2. Iterate through all PDFs in the directory
+    all_files = os.listdir(SOURCE_DIRECTORY)
+    pdf_files = [f for f in all_files if f.endswith(".pdf")]
+    
+    # Identify files to skip (original files that have a _clean version)
+    clean_versions = [f for f in pdf_files if f.endswith("_clean.pdf")]
+    originals_with_clean = [f.replace("_clean.pdf", ".pdf") for f in clean_versions]
+    
     documents = []
-    for filename in os.listdir(SOURCE_DIRECTORY):
-        if filename.endswith(".pdf"):
-            file_path = os.path.join(SOURCE_DIRECTORY, filename)
-            print(f"Loading: {filename}...")
+    for filename in pdf_files:
+        # Skip if there's a cleaner version available
+        if filename in originals_with_clean:
+            print(f"Skipping original (clean version found): {filename}")
+            continue
             
+        file_path = os.path.join(SOURCE_DIRECTORY, filename)
+        print(f"Loading: {filename}...")
+        
+        try:
             # Load the PDF
             loader = PyPDFLoader(file_path)
             docs = loader.load()
             
-            # Add metadata (Filename) so we can cite it later
+            # Add metadata (Filename and relative path)
             for doc in docs:
                 doc.metadata["source_manual"] = filename
+                # Page numbers should be 1-indexed for user readability
+                if "page" in doc.metadata:
+                    doc.metadata["page"] = int(doc.metadata["page"]) + 1
+                else:
+                    doc.metadata["page"] = "N/A"
             
             documents.extend(docs)
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
 
     if not documents:
         print("No PDFs found to ingest.")

@@ -180,8 +180,8 @@ app.post('/api/rag-query', (req, res) => {
 
 // Endpoint for Ollama LLM integration
 const ollamaAgent = new Agent({
-    headersTimeout: 300000, // 5 minutes for slow model loading
-    bodyTimeout: 300000     // 5 minutes for long generation
+    headersTimeout: 600000, // 10 minutes for slow model loading/generation
+    bodyTimeout: 600000     // 10 minutes for slow model loading/generation
 });
 
 app.post('/api/ai-chat', async (req, res) => {
@@ -212,6 +212,8 @@ app.post('/api/ai-chat', async (req, res) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             dispatcher: ollamaAgent,
+            headersTimeout: 600000,
+            bodyTimeout: 600000,
             body: JSON.stringify({
                 model: model,
                 prompt: contextPrefix + prompt,

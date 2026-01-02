@@ -1,5 +1,12 @@
 [
   {
+    "hash": "b8dd70c320a35d8e9ce13df93ccd45919c761f22",
+    "author": "Richmbrm",
+    "date": "2026-01-01",
+    "message": "Update local changes made to LLM PDF manual ingestion and dashboard changes",
+    "aiSummary": "Updated LLM PDF ingestion and dashboard features based on local changes."
+  },
+  {
     "hash": "929e9087f750e83436386926296c336b1a008e2b",
     "author": "Richmbrm",
     "date": "2025-12-31",
@@ -341,12 +348,5 @@
     "date": "2025-12-27",
     "message": "Allow dynamic API URL for cloud hosting",
     "aiSummary": "\"We have added support for dynamically generating API URLs in cloud-hosted environments.\""
-  },
-  {
-    "hash": "b6eb8bccdb51fa28fbaf1a65ebdf8b373898fc26",
-    "author": "Richmbrm",
-    "date": "2025-12-27",
-    "message": "Update project title to include 'MVP'",
-    "aiSummary": "Updated project title to reflect its Minimum Viable Product (MVP) development stage."
   }
 ]

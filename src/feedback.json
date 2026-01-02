@@ -1,1 +1,68 @@
-[]
+[
+  {
+    "query": "why is the disinfection of cleanrooms particularly important?",
+    "response": "The disinfection of cleanrooms is crucial for maintaining a sterile environment during the manufacturing process of pharmaceutical products. The contamination of surfaces within cleanrooms can lead to particle and microbial contamination of the product, which may result in patient infection or adverse health effects. Therefore, it is essential to have appropriate cleaning and disinfection procedures in place to prevent such contamination events from occurring.",
+    "status": "useful",
+    "date": "2026-01-01T18:51:25.812Z"
+  },
+  {
+    "query": "why is the disinfection of cleanrooms particularly important?",
+    "response": "The cleanroom environment is aseptic and sterile. It prevents contamination by particles and microorganisms, such as bacteria, fungi, and viruses. Therefore, the disinfection process is essential to maintaining the cleanliness of the cleanrooms and ensuring product safety. This is because the presence of any particles or microorganisms in the environment can result in adverse consequences, including contamination of products, equipment damage, and potential health risks for personnel. For example, bacterial endotoxins and viruses can transfer to products, resulting in patient infection . Furthermore, fungi and bacteria can accumulate on cleanroom walls, ceilings, or floors, which can lead to a build-up of organic material on surfaces, thereby affecting cleanroom equipment and causing potential contamination risks . Moreover, particles and microorganisms can potentially transfer from the cleanroom environment to products. Therefore, it is crucial to eliminate all particles and microorganisms in the cleanroom by performing the required disinfection steps.",
+    "status": "useful",
+    "date": "2026-01-01T18:53:12.155Z"
+  },
+  {
+    "query": "what is a pharmaceutical quality system (pqs)",
+    "response": "<|im_sep|>",
+    "status": "not_useful",
+    "date": "2026-01-01T21:05:47.893Z"
+  },
+  {
+    "query": "what is a pharmaceutical quality system (pqs)",
+    "response": "Reference: [Source: WHO_Guidance_Quality_Management.pdf, Page: 2] Content: The Pharmaceutical Quality System is an organization’s set of activities that ensures a consistently high-quality product and services. It also helps to ensure that the customer's needs are satisfied and regulatory requirements are met. This includes having well-documented processes and standards, trained staff, and systems for monitoring quality.",
+    "status": "useful",
+    "date": "2026-01-01T21:19:55.594Z"
+  },
+  {
+    "query": "what are the air changes per hour for iso 7",
+    "response": "Response:",
+    "status": "not_useful",
+    "date": "2026-01-01T22:09:02.412Z"
+  },
+  {
+    "query": "what is the minimum air change rate per hour (ach) required for an iso 7 cleanroom according to the design basis?",
+    "response": "According to ISO 14644-1:2015 [Source: ISO_Standard_14644-1.pdf, Page: 14], the minimum airflow rates for different cleanroom classes are specified. For an ISO 7 cleanroom, which corresponds to a low-risk environment with moderate airborne contamination levels, the design basis requires a specific air change rate.\n\nAccording to the document, for ISO 7 cleanrooms, the recommended design airflow rate is between 30 and 50 L/s (or equivalent). However, to determine the minimum air change rate per hour (ach), we need to calculate this based on the volume of the cleanroom.\n\nWhile I don't have specific information about the cleanroom's volume, ISO 14644-1:2015 [Source: ISO_Standard_14644-1.pdf, Page: 14] states that for an ISO 7 cleanroom, it is recommended to use a total air change rate of at least 3.0 ach.\n\nNote: I don't have enough context information from the provided regulatory manual sources to calculate the minimum airflow or determine which source best relates this specification.",
+    "status": "useful",
+    "date": "2026-01-02T14:49:08.945Z"
+  },
+  {
+    "query": "what is the minimum air change rate per hour (ach) required for an iso 7 cleanroom according to the design basis?",
+    "response": "According to ISO 14644-1:2019 [Source: ISO 14644-1:2019, Clause 6.5], the minimum Air Change Rate (ACH) is defined as follows:\n\n\"The minimum Air Change Rate (ach) is specified depending on the desired cleanliness class of the environment. For a Cleanroom of Class 7 according to ISO 14644-2 [Source: ISO 14644-1:2019, Annex A], the recommended minimum Air Change Rate is 50 ach per hour.\"\n\nTherefore, for an ISO 7 cleanroom, the minimum air change rate per hour (ACH) required would be at least 50 ach/hour.",
+    "status": "useful",
+    "date": "2026-01-02T14:49:30.515Z"
+  },
+  {
+    "query": "can you tell me what the maximum permitted airborne particle concentrat across grades a to d are?",
+    "response": "According to the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 14], the maximum permitted airborne particle concentration for different cleanroom grades is as follows:\n\n* Grade A: 100-500 particles/cubic ft (0.01-0.05 μm)\n* Grade B: 50-200 particles/cubic ft (0.01-0.05 μm)\n* Grade C: 10-50 particles/cubic ft (0.01-0.05 μm)\n* Grade D: 1-10 particles/cubic ft (0.01-0.05 μm)\n\nHowever, for the specific case of an ISO 7 cleanroom, which corresponds to a low-risk environment with moderate airborne contamination levels, I couldn't find any direct reference in the provided regulatory manual.\n\nBut, according to the ISO 14644 standard [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 14], an Annex A states that for Cleanroom classes, the following particle concentrations are recommended:\n\n* Class 7 (ISO 7): 100 particles/cm³\n\nHowever, this information alone doesn't provide a clear answer to the question of maximum permitted airborne particle concentration across grades A to D.\n\nBut based on ISO 14644-1:2019 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 14], which states:\n\n\"The minimum Air Change Rate (ach) is specified depending on the desired cleanliness class of the environment.\"\n\nAccording to Annex A of this standard, for Cleanroom classes, the following particle concentrations are recommended:\n\n* Class 7 (ISO 7): 100 particles/cm³\n* The higher the clean room class number, the lower the maximum particle concentration allowed.\n\nHowever I couldn't verify the exact range across grades A-D.\n\nTo answer your question with the highest technical precision available based on the current regulatory evidence, it appears that:\n\n- For an ISO 7 Cleanroom: a recommended upper limit is not provided.",
+    "status": "useful",
+    "date": "2026-01-02T14:54:31.111Z"
+  },
+  {
+    "query": "what is a fumigation agent and dispersion system",
+    "response": "Based on the provided regulatory evidence from the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: ???], I can provide an answer with technical precision.\n\nA fumigation agent is a substance used to kill or inactivate microorganisms and other biological agents on surfaces and in the air. The choice of fumigation agent depends on the type and level of contamination, as well as the specific requirements of the facility.\n\nIn terms of dispersion systems, the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: ???] states that a suitable dispersion system should be designed to ensure effective distribution and retention of the fumigation agent in the affected area.\n\nAccording to Section 11.5.6, \"Fumigation Systems,\" the NIH requires that fumigation systems be designed and installed according to established standards and guidelines. The manual does not specifically define a typical fumigation system or dispersion method, but it emphasizes the importance of ensuring proper system design, installation, and operation.\n\nHowever, I can suggest some general information on common fumigation agents and dispersion systems used in cleanrooms and biocontainment facilities.\n\nCommon fumigation agents include:\n\n1. Hydrogen peroxide (H2O2)\n2. Ethylene oxide\n3. Formaldehyde\n4. Chlorine dioxide\n\nDispersal methods may involve the use of:\n\n1. Ventilation systems with air scrubbers or HEPA filters\n2. Fume hoods or workstations with fume exhaust\n3. Automated dispensing systems, such as misting or spraying nozzles\n4. Gravity-driven distribution systems, where the fumigation agent is allowed to fall onto surfaces\n\nIt's essential to consult with a qualified expert in the field and follow established guidelines and regulations, such as those outlined in ISO 14644-1:2019 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: ???], for designing and implementing effective fumigation systems in cleanrooms and biocontainment facilities.\n\nPlease note that the provided regulatory evidence does not explicitly cover the topic of fumigation agents and dispersion systems. The information above is based on general knowledge and may require further research or consultation with subject matter experts to ensure accuracy and compliance with applicable regulations.",
+    "status": "useful",
+    "date": "2026-01-02T15:03:13.821Z"
+  },
+  {
+    "query": "what is a fumigation agent and dispersion system?",
+    "response": "Based on the provided NIH Design Requirements Manual Rev. 2.1: 8/2/2024, a fumigation agent is defined as:\n\n\"Chemicals used to control pests by creating an unfavorable environment for them.\" (Source: NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Page: 549])\n\nRegarding the dispersion system, it refers to a method or device used to distribute the fumigant agent throughout a controlled area to achieve effective pest control.\n\nThe manual does not provide specific details on the types of dispersion systems that can be used in biocontainment facilities. However, it does mention that the dispersion system should be designed and installed to:\n\n* \"Effectively remove or kill all pests\"\n* \"Minimize exposure to occupants and visitors\"\n* \"Ensure complete coverage of the area\"\n\n(Source: NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Page: 549])\n\nIn general, dispersion systems for fumigation agents can include various methods such as:\n\n* Ventilation systems\n* Air-handling units\n* Exhaust fans\n* Aeration and deaeration devices\n\nThe specific design and installation of the dispersion system will depend on factors such as the type and concentration of the fumigant agent, the size and layout of the controlled area, and local building codes and regulations.\n\nIt's worth noting that the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 does not provide specific guidance on fumigation agents or dispersion systems for biocontainment facilities. For accurate and detailed information, it is recommended to consult with a qualified professional or refer to established guidelines and standards in the field of biocontainment facility design and operations.",
+    "status": "useful",
+    "date": "2026-01-02T15:05:27.069Z"
+  },
+  {
+    "query": "what is a fumigation agent and dispersion system?",
+    "response": "To answer this question with deep technical precision based on the current regulatory evidence:\n\nAccording to the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 14], a fumigation agent is defined as \"any chemical or other material which is used for fumigating surfaces\".\n\nRegarding the dispersion system, the NIH Design Requirements Manual Rev. 2.1: 8/2/2024 [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 529] states that \"The fumigation system shall include a gas-handling and distribution system which includes a source of the fumigating agent, controls for dispensing and distributing the agent to the area to be treated, and ventilation systems to remove vapors from the treated area\".\n\nFurthermore, according to Section 14.4 FUMIGATION [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 544], \"The fumigation system shall be designed to provide a uniform distribution of the agent throughout the treated area, and shall include controls for ventilation and exhaust systems to remove vapors from the treated area\".\n\nIt is also noted that Section 14.6.3 FUMIGATION SYSTEMS [Source: nih_design_requirements_rev_2.1_2024_clean.pdf, Page: 898] states \"The fumigation system shall be designed to ensure that the agent is distributed uniformly throughout the treated area, and that vapors are removed from the treated area through a ventilation system\".\n\nIn summary, for a fumigation system to be effective and safe, it must include a gas-handling and distribution system that provides a uniform distribution of the fumigating agent throughout the treated area, along with controls for ventilation and exhaust systems to remove vapors.\n\nContext: The NIH Design Requirements Manual Rev. 2.1: 8/2/2024 is applicable for biocontainment facilities on the NIH campus, which may require specialized fumigation systems to minimize risks to occupants and the environment.",
+    "status": "useful",
+    "date": "2026-01-02T15:08:10.498Z"
+  }
+]

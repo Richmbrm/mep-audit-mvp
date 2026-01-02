@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/src/style.css">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
     <style>
         .summary-card {
             background: var(--color-bg-light);
@@ -154,6 +158,55 @@
                             <em>Note: The backend proxy in <code>server.js</code> bridges the web interface to this
                                 secure local endpoint.</em>
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary-card animate-in" style="border-left: 4px solid #8b5cf6;">
+                <h2>System Architecture Node Map</h2>
+                <p>Visualization of the 100% local data circuit and node associations.</p>
+
+                <div class="mermaid"
+                    style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; overflow: hidden; display: flex; justify-content: center;">
+                    graph TD
+                    User["🌐 User Browser (Vite/JS)"]
+                    Server["🚀 Node.js Server (Express)"]
+                    Python["🐍 Python Audit Engine"]
+                    Vector["📦 ChromaDB (Vector Store)"]
+                    Ollama["🦙 Ollama API (v11434)"]
+
+                    subgraph Models ["LLM Model Nodes"]
+                    BM["🧪 BioMistral (MEP Expert)"]
+                    LLM["🤖 Llama 3.2 (Reasoning)"]
+                    NOM["📑 Nomic-Embed (RAG)"]
+                    end
+
+                    User ---|"REST API (JSON)"| Server
+                    Server --->|"Exec Process"| Python
+                    Server ---|"Query Bridge"| Vector
+                    Server ---|"Undici Proxy"| Ollama
+                    Ollama --> BM
+                    Ollama --> LLM
+                    Ollama --> NOM
+
+                    style User fill:#3b82f6,stroke:#fff,stroke-width:2px
+                    style Server fill:#10b981,stroke:#fff,stroke-width:2px
+                    style Models fill:#1e293b,stroke:#8b5cf6,stroke-width:2px
+                </div>
+
+                <div class="summary-grid">
+                    <div>
+                        <h3>🔗 Node Associations</h3>
+                        <ul style="color: var(--color-text-dim); font-size: 0.9rem; line-height: 1.6;">
+                            <li><strong>Frontend → Backend:</strong> Secured via local CORS; handles audit triggers,
+                                file uploads, and AI queries.</li>
+                            <li><strong>Backend → Python:</strong> Orchestrates the technical validation logic and
+                                regulatory RAG ingestion engine.</li>
+                            <li><strong>Backend → Ollama:</strong> Bridges the web interface to local model weights via
+                                high-timeout proxying.</li>
+                            <li><strong>Ollama → Models:</strong> Dynamically serves and manages the three active model
+                                nodes in local memory.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
