@@ -1,5 +1,12 @@
 [
   {
+    "hash": "50322803c738d475b5d2c47bae53a873f8a08eb6",
+    "author": "Richmbrm",
+    "date": "2026-01-02",
+    "message": "General update since re indexing and dedupe of dbs",
+    "aiSummary": "We have updated the system following recent database re-indexing and deduplication efforts."
+  },
+  {
     "hash": "b8dd70c320a35d8e9ce13df93ccd45919c761f22",
     "author": "Richmbrm",
     "date": "2026-01-01",
@@ -341,12 +348,5 @@
     "date": "2025-12-27",
     "message": "fix homepage routing for render deployment",
     "aiSummary": "Fixed homepage routing issues to ensure proper rendering of the home page during a render deployment."
-  },
-  {
-    "hash": "23348c998bc958c0c2a2039ce7c8515f2aa4fe2e",
-    "author": "Richmbrm",
-    "date": "2025-12-27",
-    "message": "Allow dynamic API URL for cloud hosting",
-    "aiSummary": "\"We have added support for dynamically generating API URLs in cloud-hosted environments.\""
   }
 ]

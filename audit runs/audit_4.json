@@ -1,0 +1,63 @@
+{
+    "job_reference": "Test",
+    "run_date": "2026-01-03 11:10:40",
+    "input_file": "MEPComponents.csv",
+    "rooms": [
+        {
+            "name": "Tissue Culture Lab 01",
+            "ach": 42.67,
+            "status": "PASS",
+            "comfort": "Sub-optimal"
+        },
+        {
+            "name": "General Prep Area",
+            "ach": 7.5,
+            "status": "FAIL",
+            "comfort": "Optimal"
+        },
+        {
+            "name": "Storage Room",
+            "ach": 3.33,
+            "status": "FAIL",
+            "comfort": "Optimal"
+        },
+        {
+            "name": "Analytical Lab",
+            "ach": 44.44,
+            "status": "PASS",
+            "comfort": "Sub-optimal"
+        }
+    ],
+    "equipment": [
+        {
+            "mark": "P-01",
+            "category": "Pump",
+            "status": "PASS",
+            "issues": "None"
+        },
+        {
+            "mark": "EF-01",
+            "category": "Fan",
+            "status": "PASS",
+            "issues": "None"
+        },
+        {
+            "mark": "CH-01",
+            "category": "Chiller",
+            "status": "PASS",
+            "issues": "None"
+        },
+        {
+            "mark": "VAV-1-01",
+            "category": "Terminal Unit",
+            "status": "PASS",
+            "issues": "None"
+        },
+        {
+            "mark": "CU-01",
+            "category": "Condensing Unit",
+            "status": "PASS",
+            "issues": "None"
+        }
+    ]
+}

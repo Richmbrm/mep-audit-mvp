@@ -1,6 +1,12 @@
 import sys
 import os
 import json
+import warnings
+
+# Silence LangChain deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", message=".*Chroma.*")
+
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 

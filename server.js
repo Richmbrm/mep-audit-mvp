@@ -16,7 +16,47 @@ const COMMENTS_FILE = path.join(PROJECT_ROOT, 'src', 'comments.json');
 const FEEDBACK_FILE = path.join(PROJECT_ROOT, 'src', 'feedback.json');
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Lightweight health check for Ollama
+app.get('/api/health', async (req, res) => {
+    try {
+        const { statusCode } = await request('http://127.0.0.1:11434/api/tags', {
+            method: 'GET',
+            dispatcher: ollamaAgent,
+            headersTimeout: 5000,
+            connectTimeout: 2000
+        });
+        res.json({ online: statusCode === 200 });
+    } catch (e) {
+        res.json({ online: false, error: e.message });
+    }
+});
+
+// Vision-based chat for schematic interpretation
+app.post('/api/vision-chat', async (req, res) => {
+    const { prompt, images } = req.body;
+    try {
+        const { body } = await request('http://127.0.0.1:11434/api/generate', {
+            method: 'POST',
+            dispatcher: ollamaAgent,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'moondream',
+                prompt: prompt,
+                images: images, // Array of base64 strings
+                stream: false
+            })
+        });
+
+        const data = await body.json();
+        res.json({ response: data.response });
+    } catch (e) {
+        console.error('Vision API Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
 
 // Endpoint to list CSV/ODS files
 app.get('/api/files', (req, res) => {
@@ -162,7 +202,7 @@ app.post('/api/rag-query', (req, res) => {
     // Using --break-system-packages context if needed, but here we just run python3 directly
     const cmd = `python3 query_manuals.py "${query.replace(/"/g, '\\"')}"`;
 
-    exec(cmd, { cwd: PROJECT_ROOT, timeout: 15000 }, (error, stdout, stderr) => {
+    exec(cmd, { cwd: PROJECT_ROOT, timeout: 60000 }, (error, stdout, stderr) => {
         if (error) {
             console.error('RAG Query Error:', stderr || error.message);
             return res.status(500).json({ error: 'Failed to query vector database', details: stderr });
@@ -180,12 +220,13 @@ app.post('/api/rag-query', (req, res) => {
 
 // Endpoint for Ollama LLM integration
 const ollamaAgent = new Agent({
-    headersTimeout: 600000, // 10 minutes for slow model loading/generation
-    bodyTimeout: 600000     // 10 minutes for slow model loading/generation
+    headersTimeout: 1200000, // 20 minutes for very slow model loading/generation
+    bodyTimeout: 1200000,    // 20 minutes for very slow model loading/generation
+    connectTimeout: 60000   // 1 minute for initial handshake
 });
 
 app.post('/api/ai-chat', async (req, res) => {
-    const { prompt, model = 'biomistral' } = req.body;
+    const { prompt, model = 'phi3:latest' } = req.body;
 
     try {
         console.log(`AI Chat Request: model=${model}`);
@@ -212,8 +253,8 @@ app.post('/api/ai-chat', async (req, res) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             dispatcher: ollamaAgent,
-            headersTimeout: 600000,
-            bodyTimeout: 600000,
+            headersTimeout: 1200000,
+            bodyTimeout: 1200000,
             body: JSON.stringify({
                 model: model,
                 prompt: contextPrefix + prompt,

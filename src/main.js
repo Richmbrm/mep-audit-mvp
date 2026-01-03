@@ -40,9 +40,20 @@ const runStatus = document.getElementById('runStatus');
 const resetBtn = document.getElementById('resetBtn');
 const runFileInput = document.getElementById('runFileInput');
 
+// Vision Controls
+const schematicUpload = document.getElementById('schematicUpload');
+const visionPreviewContainer = document.getElementById('visionPreviewContainer');
+const visionPreview = document.getElementById('visionPreview');
+const analyzeSchematicBtn = document.getElementById('analyzeSchematicBtn');
+const clearSchematicBtn = document.getElementById('clearSchematicBtn');
+
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? `http://${window.location.hostname}:3001/api`
   : '/api';
+
+// Request Cancellation Controllers
+let searchAbortController = null;
+let llmAbortController = null;
 
 // Utility: Debounce
 function debounce(func, timeout = 300) {
@@ -193,33 +204,43 @@ runBtn.addEventListener('click', async () => {
 // LLM Integration Functions
 async function checkLLMStatus() {
   try {
-    const res = await fetch(`${API_BASE}/ai-chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: 'hi', model: llmModelSelect.value })
+    const res = await fetch(`${API_BASE}/health`, {
+      signal: AbortSignal.timeout(10000) // 10s timeout for safety
     });
-    if (res.ok) {
+    const data = await res.json();
+    if (data.online) {
       console.info(`✓ Ollama check: "${llmModelSelect.value}" is ONLINE`);
       llmStatus.classList.add('online');
-      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Online';
+      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Online (Ready)';
     } else {
-      console.warn(`✗ Ollama check: "${llmModelSelect.value}" status code ${res.status}`);
+      console.warn(`✗ Ollama check: "${llmModelSelect.value}" is BUSY or OFFLINE`);
       llmStatus.classList.remove('online');
-      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Offline';
+      llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Busy/Offline';
     }
   } catch (e) {
     llmStatus.classList.remove('online');
+    llmStatus.querySelector('.tooltip-text').textContent = 'Local LLM Offline';
   }
 }
 checkLLMStatus();
+// Re-check periodically
+setInterval(checkLLMStatus, 30000);
 llmModelSelect.addEventListener('change', checkLLMStatus);
 
 async function performLLMReasoning(query, ragContext = null) {
+  // Cancel any existing LLM request
+  if (llmAbortController) llmAbortController.abort();
+  llmAbortController = new AbortController();
+
   const model = llmModelSelect.value;
-  let systemPrompt = "You are a professional MEP and ISO 14644 Compliance Engineer. Your goal is to provide deep technical reasoning for audit results. Be concise and technical.";
+  let systemPrompt = "You are a professional MEP and ISO 14644 Compliance Engineer. Provide a high-level technical summary of how regulatory standards apply to the user's query.\n\n" +
+    "STRICT RULES:\n" +
+    "1. Format your response as 3 BULLET POINTS ONLY.\n" +
+    "2. Be extremely concise (MAX 100 WORDS total).\n" +
+    "3. Focus on high-level technical implications, not document-level verbosity.";
 
   if (model.includes('biomistral')) {
-    systemPrompt += " Use your scientific and cleanroom expertise to provide highly detailed filtration and contamination control insights.";
+    systemPrompt += "\n4. Use your scientific expertise to highlight filtration and contamination control priorities.";
   }
 
   // --- AUGMENTATION: Inject RAG Context ---
@@ -240,14 +261,52 @@ async function performLLMReasoning(query, ragContext = null) {
       body: JSON.stringify({
         prompt: augmentedPrompt,
         model: model
-      })
+      }),
+      signal: llmAbortController.signal
     });
     const data = await res.json();
     return data.response || null;
   } catch (e) {
+    if (e.name === 'AbortError') return 'REQUEST_CANCELLED';
     return null;
+  } finally {
+    llmAbortController = null;
   }
 }
+
+// Global handler for deep reasoning button
+window.triggerDeepReasoning = async (query, btn) => {
+  const container = btn.closest('.result-item');
+  const queryData = btn.dataset.query;
+  const ragData = JSON.parse(btn.dataset.rag || '[]');
+
+  btn.disabled = true;
+  btn.innerHTML = '⚙️ Analyzing Standards...';
+
+  const response = await performLLMReasoning(queryData, ragData);
+
+  if (response === 'REQUEST_CANCELLED') return;
+
+  if (response) {
+    const escapedReasoning = safeEscape(response);
+    const escapedQuery = safeEscape(queryData);
+
+    // Replace button area with result
+    btn.parentElement.innerHTML = `
+      <div class="animate-in" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+        <p class="llm-reasoning-text" style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${response}</p>
+        <div class="feedback-container" style="margin-top: 1rem;">
+          <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', true, this)" class="feedback-btn mini">👍 Useful</button>
+          <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', false, this)" class="feedback-btn mini">👎 Not Useful</button>
+          <button onclick="copyToClipboard('${escapedReasoning}', this)" class="mini-copy-btn" style="margin-left: auto;">📋 Copy</button>
+        </div>
+      </div>
+    `;
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '❌ Reasoning Failed - Retry?';
+  }
+};
 
 // Global copy helper for AI results
 window.copyToClipboard = async (text, btn) => {
@@ -349,6 +408,10 @@ async function performSearch(query) {
     return;
   }
 
+  // Cancel any existing search (RAG) request
+  if (searchAbortController) searchAbortController.abort();
+  searchAbortController = new AbortController();
+
   const results = [];
   // Basic recursive search through standards DB
   function search(obj, path = '') {
@@ -362,10 +425,11 @@ async function performSearch(query) {
   }
   search(STANDARDS_DB);
 
-  let html = ''; // Initialize html here
+  let html = '';
 
   // --- TIER 1: LOCAL RESULTS ---
   if (results.length > 0) {
+    html += '<div class="search-category-header">Local Standards Reference</div>';
     html += results.slice(0, 5).map((res, index) => `
       <div class="result-item" data-index="${index}" style="cursor: pointer;">
         <span class="insight-tag">LOCAL EXPERT: ${res.path}</span>
@@ -375,12 +439,16 @@ async function performSearch(query) {
   }
 
   // --- TIER 2: REGULATORY EVIDENCE (RAG) ---
-  const ragResults = await performRAGQuery(query);
+  const ragResults = await performRAGQuery(query, searchAbortController.signal);
+
+  if (ragResults === 'REQUEST_CANCELLED') return;
+
   if (ragResults && ragResults.length > 0) {
+    html += '<div class="search-category-header">Regulatory Manual Evidence (RAG)</div>';
     html += ragResults.map(res => `
       <div class="result-item" style="border-left: 4px solid var(--color-warning); background: rgba(245, 158, 11, 0.05);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-          <span class="insight-tag">📜 REGULATORY EVIDENCE: ${res.source}</span>
+          <span class="insight-tag">📜 ${res.source} (Pg ${res.page})</span>
           <button onclick="copyToClipboard('${safeEscape(res.content)}', this)" class="mini-copy-btn">📋 Copy</button>
         </div>
         <p style="font-size: 0.875rem; color: var(--color-text); line-height: 1.5;">"${res.content.substring(0, 300)}..."</p>
@@ -388,42 +456,42 @@ async function performSearch(query) {
     `).join('');
   }
 
-  // --- TIER 3: LOCAL LLM REASONING (IF ONLINE) ---
-  if (llmStatus.classList.contains('online')) {
-    // Pass the RAG results directly into the LLM reasoning function for "Augmentation"
-    const reasoning = await performLLMReasoning(query, ragResults);
-    if (reasoning) {
-      const escapedReasoning = safeEscape(reasoning);
-      const escapedQuery = safeEscape(query);
-      html += `
-        <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); margin-bottom: 0.5rem; border-radius: 0.5rem; padding: 1rem; position: relative;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="insight-tag">🌟 LOCAL ENGINEERING LLM (${llmModelSelect.value.toUpperCase()})</span>
-            <button onclick="copyToClipboard('${escapedReasoning}', this)" class="mini-copy-btn" title="Copy reasoning to clipboard">📋 Copy</button>
-          </div>
-          <p class="llm-reasoning-text" style="font-size: 0.95rem; line-height: 1.5; color: #fff;">${reasoning}</p>
-          
-          <div class="feedback-container">
-            <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', true, this)" class="feedback-btn">👍 Useful</button>
-            <button onclick="submitFeedback('${escapedQuery}', '${escapedReasoning}', false, this)" class="feedback-btn">👎 Not Useful</button>
-          </div>
-        </div>
-      `;
-    }
-  }
+  // --- TIER 3: LOCAL LLM REASONING (ALWAYS SHOW TRIGGER) ---
+  const escapedQuery = safeEscape(query);
+  const escapedRagData = safeEscape(JSON.stringify(ragResults || []));
+  const isOnline = llmStatus.classList.contains('online');
 
+  html += `
+    <div class="result-item" style="border-left: 4px solid var(--color-success); background: rgba(16, 185, 129, 0.05); text-align: center; padding: 1.5rem;">
+      <span class="insight-tag" style="margin-bottom: 1rem; display: inline-block;">🌟 AI ENGINEERING ANALYSIS</span>
+      <p style="font-size: 0.85rem; color: var(--color-text-dim); margin-bottom: 1rem;">
+        ${isOnline ? 'Generate a technical breakdown using ' + llmModelSelect.value.toUpperCase() + '.' : 'LLM is currently Busy/Offline. You can still try to trigger an analysis.'}
+      </p>
+      <button 
+        onclick="triggerDeepReasoning('${escapedQuery}', this)" 
+        class="primary-btn mini" 
+        data-query="${escapedQuery}"
+        data-rag="${escapedRagData}"
+        style="width: 100%; border: ${isOnline ? 'none' : '1px solid var(--color-warning)'}; background: ${isOnline ? 'var(--color-primary)' : 'rgba(0,0,0,0.3)'}"
+      >
+        🚀 Generate Deep AI Insight
+      </button>
+    </div>
+  `;
 
-  async function performRAGQuery(query) {
+  async function performRAGQuery(query, signal) {
     try {
       const res = await fetch(`${API_BASE}/rag-query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query }),
+        signal: signal
       });
       if (!res.ok) return null;
       const data = await res.json();
       return data.results || null;
     } catch (e) {
+      if (e.name === 'AbortError') return 'REQUEST_CANCELLED';
       return null;
     }
   }
@@ -452,7 +520,7 @@ async function performSearch(query) {
   }
 }
 
-const debouncedSearch = debounce((q) => performSearch(q), 400);
+const debouncedSearch = debounce((q) => performSearch(q), 800);
 
 standardsSearch.addEventListener('input', (e) => {
   debouncedSearch(e.target.value.toLowerCase());
@@ -593,3 +661,71 @@ function renderDashboard(data, fileName) {
 
   dashboard.scrollIntoView({ behavior: 'smooth' });
 }
+
+// --- VISION INTERPRETER LOGIC ---
+
+schematicUpload.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    visionPreview.src = event.target.result;
+    visionPreviewContainer.classList.remove('hidden');
+    visionPreviewContainer.scrollIntoView({ behavior: 'smooth' });
+  };
+  reader.readAsDataURL(file);
+});
+
+async function analyzeSchematic() {
+  const file = schematicUpload.files[0];
+  if (!file) {
+    alert("Please select a schematic image first.");
+    return;
+  }
+
+  analyzeSchematicBtn.disabled = true;
+  analyzeSchematicBtn.innerText = "🔍 Analyzing Layout...";
+
+  // Get base64 without the prefix
+  const base64 = visionPreview.src.split(',')[1];
+
+  try {
+    const res = await fetch(`${API_BASE}/vision-chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: "Analyze this schematic diagram. Identify key MEP components, filtration systems, and room cleanroom classifications. Briefly summarize the compliance risks if any.",
+        images: [base64]
+      })
+    });
+
+    const data = await res.json();
+
+    // Display result in AI Expert panel
+    aiExpertContent.innerHTML = `
+      <div class="insight-card animate-in" style="border-left: 4px solid var(--color-primary);">
+        <span class="insight-tag">📋 SCHEMATIC VISUAL ANALYSIS</span>
+        <p style="font-size: 0.875rem; line-height: 1.6; margin: 0.5rem 0; white-space: pre-wrap;">${data.response}</p>
+        <div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--color-border); font-size: 0.75rem; color: var(--color-text-dim);">
+          💡 Analysis provided by Moondream Vision Model
+        </div>
+      </div>
+    `;
+    aiExpert.classList.remove('hidden');
+  } catch (err) {
+    console.error('Vision Analysis Error:', err);
+    alert('Failed to analyze schematic. Ensure Ollama is running Moondream.');
+  } finally {
+    analyzeSchematicBtn.disabled = false;
+    analyzeSchematicBtn.innerText = "Analyze Layout";
+  }
+}
+
+analyzeSchematicBtn.addEventListener('click', analyzeSchematic);
+
+clearSchematicBtn.addEventListener('click', () => {
+  schematicUpload.value = '';
+  visionPreview.src = '';
+  visionPreviewContainer.classList.add('hidden');
+});

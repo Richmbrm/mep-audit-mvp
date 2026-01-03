@@ -162,8 +162,7 @@
           </div>
           <div class="llm-controls">
             <select id="llmModelSelect" class="mini-select">
-              <option value="cniongolo/biomistral:latest">BioMistral 7B (Scientific)</option>
-              <option value="llama3.2:latest">Llama 3.2 (Reasoning)</option>
+              <option value="phi3:latest">Phi-3 (Hardware Optimized)</option>
             </select>
             <span id="llmStatus" class="status-dot tooltip">
               <span class="tooltip-text">Local LLM Offline</span>
@@ -175,8 +174,19 @@
         </div>
         <div class="search-box">
           <input type="text" id="standardsSearch" placeholder="Ask about ISO 14644, ACH, Pressure..." />
+          <input type="file" id="schematicUpload" accept="image/*" style="display: none;" />
+          <button onclick="document.getElementById('schematicUpload').click()" class="secondary-btn"
+            title="Upload Schematic">📷</button>
           <button id="searchBtn" class="search-btn">🔍 Query Standards</button>
           <div id="searchResults" class="search-results hidden"></div>
+        </div>
+        <div id="visionPreviewContainer" class="vision-preview-container hidden">
+          <p style="font-size: 0.75rem; color: var(--color-text-dim); margin-bottom: 0.5rem;">SCHEMATIC PREVIEW</p>
+          <img id="visionPreview" src="" class="vision-preview-img" />
+          <div id="visionControls" class="vision-controls">
+            <button id="analyzeSchematicBtn" class="primary-btn mini">Analyze Layout</button>
+            <button id="clearSchematicBtn" class="secondary-btn" style="padding: 0.5rem 1rem;">Clear</button>
+          </div>
         </div>
       </section>
 
